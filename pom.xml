@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>run.mycode</groupId>
-	<artifactId>scavanger</artifactId>
+	<artifactId>scavenger</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>scavanger</name>
+	<name>scavenger</name>
 	<description>Scavenger hunt for Tech Club</description>
 	<url/>
 	<licenses>

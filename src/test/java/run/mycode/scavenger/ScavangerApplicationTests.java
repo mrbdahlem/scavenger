@@ -1,10 +1,10 @@
-package run.mycode.scavanger;
+package run.mycode.scavenger;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ScavangerApplicationTests {
+class ScavengerApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -5,7 +5,13 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [react()],
     build: {
-        outDir: '../../../target/classes/resources',
+        outDir: '../../../target/classes/static',
         emptyOutDir: true,
-    }
+
+        rollupOptions: {
+            input: {
+                app: './index.html', // entry point for the app
+            },
+        },
+    },
 })

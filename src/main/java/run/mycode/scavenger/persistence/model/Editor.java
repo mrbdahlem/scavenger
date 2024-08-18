@@ -1,5 +1,7 @@
 package run.mycode.scavenger.persistence.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import jakarta.persistence.Entity;
@@ -21,6 +23,7 @@ import java.util.Collection;
 @ToString
 public class Editor implements UserDetails {
     @Id
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "editor_id_sequence")
     private Long id;
 
     private String username;

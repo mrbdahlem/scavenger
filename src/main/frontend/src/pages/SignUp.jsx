@@ -1,6 +1,7 @@
 import {useState} from "react";
 import { useNavigate } from 'react-router-dom';
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
@@ -14,6 +15,7 @@ export const SignUpPage = () => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleSignUp = (e) => {
@@ -29,7 +31,10 @@ export const SignUpPage = () => {
             if (response.ok) {
                 navigate('/login');
             } else {
-                console.log('Failed to sign up');
+                response.json().then(data => {
+                    setError(data.message);
+                    console.error(data.status + " " + data.message);
+                });
             }
         });
 
@@ -69,6 +74,9 @@ export const SignUpPage = () => {
                         <Input id={"email"} type={"email"} value={email}
                                onChange={(e) => setEmail(e.target.value)}/>
                     </div>
+                    {error && <Alert className="bg-red-100 border-red-600">
+                        <AlertDescription>{error}</AlertDescription>
+                    </Alert>}
                     <div className={"mt-3 space-x-3 flex flex-row justify-center"}>
                         <Button variant="default" type="submit">Sign Up</Button>
                         <Button variant="secondary" type="button" onClick={() => navigate('/login')}>Login</Button>

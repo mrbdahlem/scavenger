@@ -10,4 +10,6 @@ public interface EditorRepository extends JpaRepository<Editor, Long> {
 
     boolean existsByUsername(String username);
 
+    boolean existsByEmail(String email);
+
 }

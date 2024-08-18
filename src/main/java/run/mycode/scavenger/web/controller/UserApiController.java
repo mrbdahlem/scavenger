@@ -14,7 +14,9 @@ import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.service.EditorService;
 import run.mycode.scavenger.web.dto.UserDto;
 
-
+/**
+ * Controller for user API endpoints
+ */
 @Scope("session")
 @RestController
 public class UserApiController {
@@ -22,41 +24,41 @@ public class UserApiController {
 
     private final EditorService editorService;
 
-    private Editor editor;
 
     public UserApiController(EditorService editorService, Editor editor) {
         this.editorService = editorService;
-        this.editor = editor;
     }
 
+    /**
+     * Allow a user to sign in
+     * @param authentication the signed-in user
+     * @return the signed-in user's public data
+     */
     @PostMapping("/api/signin")
     public UserDto signIn(Authentication authentication) {
         Editor user = (Editor) authentication.getPrincipal();
 
-        logger.info("User set:{}", user.equals(editor));
-
-        UserDto userDto = new UserDto();
-        userDto.setUsername(user.getUsername());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-
-        userDto.setEnabled(user.isEnabled());
-        userDto.setAccountLocked(!user.isAccountNonLocked());
-        userDto.setForcePasswordChange(!user.isCredentialsNonExpired());
-
-        return userDto;
+        return Editor.safeDto(user);
     }
 
+    /**
+     * Allow a user to sign out
+     * @param request the HttpRequest for the sign-out
+     * @param response the HttpResponse for the sign-out
+     */
     @RequestMapping("/api/signout")
     public void signOut(HttpServletRequest request, HttpServletResponse response) {
-        this.editor = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
     }
 
+    /**
+     * Allow a user to sign up for an editor account
+     * @param newUser the new user's data
+     * @return the new editor's public data
+     */
     @PostMapping("/api/signup")
     public UserDto signUp(@RequestBody UserDto newUser) {
         if (newUser.getUsername().length() < 4) {
@@ -98,8 +100,10 @@ public class UserApiController {
             throw new UserExistsException("A user with that email address already exists");
         }
 
+        // Create and save the new editor
         Editor newEditor = editorService.newEditor(newUser);
 
+        // Return the new editor's public data
         UserDto returnDto = new UserDto();
         returnDto.setUsername(newEditor.getUsername());
         returnDto.setFirstName(newEditor.getFirstName());
@@ -109,11 +113,19 @@ public class UserApiController {
         return returnDto;
     }
 
+    /**
+     * Check if a user exists
+     * @param user the user to check
+     * @return true if the user exists, false otherwise
+     */
     @PostMapping("/api/userexists")
     public boolean userExists(@RequestBody UserDto user) {
         return editorService.usernameExists(user.getUsername());
     }
 
+    /**
+     * An error flagging a user already existing
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     private static class UserExistsException extends RuntimeException {
         public UserExistsException(String message) {
@@ -121,6 +133,9 @@ public class UserApiController {
         }
     }
 
+    /**
+     * An error flagging an invalid parameter
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     private static class InvalidParameterException extends RuntimeException {
         public InvalidParameterException(String message) {

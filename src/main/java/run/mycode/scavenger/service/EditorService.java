@@ -10,6 +10,10 @@ import run.mycode.scavenger.persistence.dao.EditorRepository;
 import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.web.dto.UserDto;
 
+/**
+ * Service for creating and modifying editor accounts
+ */
+
 @Service
 @Transactional
 public class EditorService {
@@ -18,14 +22,27 @@ public class EditorService {
 
     private final EditorRepository editorRepository;
 
+    /**
+     * Create a new EditorService
+     * @param editorRepository the repository to use for editor data
+     */
     public EditorService(EditorRepository editorRepository) {
         this.editorRepository = editorRepository;
     }
 
+    /**
+     * Get the number of editor accounts in the system
+     * @return the number of editors
+     */
     public long numEditors() {
         return editorRepository.count();
     }
 
+    /**
+     * Create a new editor account
+     * @param newUser the new editor's data
+     * @return the new editor account
+     */
     public Editor newEditor(UserDto newUser) {
 
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();

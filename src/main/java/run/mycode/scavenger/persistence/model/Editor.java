@@ -11,9 +11,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import run.mycode.scavenger.web.dto.UserDto;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+/**
+ * A hunt editor's user account
+ */
 
 @Scope("session")
 @Component
@@ -35,7 +40,6 @@ public class Editor implements UserDetails {
     private boolean enabled;
     private boolean accountLocked;
     private boolean forcePasswordChange;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,5 +64,21 @@ public class Editor implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public static UserDto safeDto(Editor editor) {
+        UserDto dto = new UserDto();
+        dto.setUsername(editor.getUsername());
+        dto.setFirstName(editor.getFirstName());
+        dto.setLastName(editor.getLastName());
+        dto.setEmail(editor.getEmail());
+
+        dto.setRoles(editor.getRole());
+
+        dto.setEnabled(editor.isEnabled());
+        dto.setAccountLocked(!editor.isAccountNonLocked());
+        dto.setForcePasswordChange(editor.isForcePasswordChange());
+
+        return dto;
     }
 }

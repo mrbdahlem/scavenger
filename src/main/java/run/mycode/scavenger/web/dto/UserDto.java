@@ -32,4 +32,6 @@ public class UserDto {
     private boolean forcePasswordChange;
     private boolean accountLocked;
     private boolean enabled;
+
+    private String roles;
 }

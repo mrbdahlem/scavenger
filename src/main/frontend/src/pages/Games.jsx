@@ -1,17 +1,9 @@
-import { useAuth } from "../hooks/useAuth";
+import {Header} from "@/components/header.jsx";
 
 export const GamesPage = () => {
-    const { logout } = useAuth();
-
-    const handleLogout = () => {
-        logout();
-    }
 
     return (
-        <div className={"flex flex-row items-center min-h-screen min-w-full"}>
-            <div>
-                <button onClick={handleLogout}>Logout</button>
-            </div>
-        </div>
+        <Header />
+
     )
 }

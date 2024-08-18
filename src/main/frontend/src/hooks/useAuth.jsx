@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
     // call this function when you want to authenticate a user
     const login = async (username, password) => {
-        const newUser = userService.login(username, password)
+        const newUser = await userService.login(username, password)
         setUser(newUser);
         return newUser;
     }

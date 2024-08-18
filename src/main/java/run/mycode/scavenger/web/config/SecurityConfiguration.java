@@ -18,14 +18,21 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, EditorUserDetailsService editorUserDetailsService) throws Exception {
         http.cors(Customizer.withDefaults())
 
+                // Allow all requests to / and /assets and to the signup and userexists endpoints
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/*", "/assets/**", "/api/signup", "/api/userexists").permitAll()
-                                                .requestMatchers("/api/**").authenticated()
-
-
+                        // Allow all requests to /api/** if the user is authenticated
+                        .requestMatchers("/api/**").authenticated()
                 )
+
+                // Disable CSRF protection
                 .csrf(AbstractHttpConfigurer::disable) // TODO: Add CSRF protection for Single Page Application
+
+                // Use basic authentication (username / password) for api requests
                 .httpBasic(httpSecurityHttpBasicConfigurer ->
+                        // Use a custom authentication entry point that does not pop up a login dialog
                         httpSecurityHttpBasicConfigurer.authenticationEntryPoint(new NoPopupBasicAuthenticationEntryPoint()))
+
+                // Use a custom user details service to authenticate editors
                 .userDetailsService(editorUserDetailsService);
 
         return http.build();

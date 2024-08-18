@@ -19,7 +19,6 @@ export const LoginPage = () => {
         e.preventDefault();
 
         const user = await login(username, password)
-        console.log(user);
         if (user !== null) {
             const redirect = searchParams.get('redirect');
             navigate(redirect ? redirect : '/');

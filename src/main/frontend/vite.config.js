@@ -31,25 +31,25 @@ export default defineConfig({
                         console.log("proxy error", err);
                     });
                     proxy.on("proxyReq", (proxyReq, req, _res) => {
-                        console.log(
-                            "Sending Request:",
-                            req.method,
-                            req.url,
-                            " => TO THE TARGET =>  ",
-                            proxyReq.method,
-                            proxyReq.protocol,
-                            proxyReq.host,
-                            proxyReq.path,
-                            JSON.stringify(proxyReq.getHeaders()),
-                        );
+                        // console.log(
+                        //     "Sending Request:",
+                        //     req.method,
+                        //     req.url,
+                        //     " => TO THE TARGET =>  ",
+                        //     proxyReq.method,
+                        //     proxyReq.protocol,
+                        //     proxyReq.host,
+                        //     proxyReq.path,
+                        //     JSON.stringify(proxyReq.getHeaders()),
+                        // );
                     });
                     proxy.on("proxyRes", (proxyRes, req, _res) => {
-                        console.log(
-                            "Received Response from the Target:",
-                            proxyRes.statusCode,
-                            req.url,
-                            JSON.stringify(proxyRes.headers),
-                        );
+                        // console.log(
+                        //     "Received Response from the Target:",
+                        //     proxyRes.statusCode,
+                        //     req.url,
+                        //     JSON.stringify(proxyRes.headers),
+                        // );
                     });
                 },
             },

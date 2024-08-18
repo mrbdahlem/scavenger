@@ -3,7 +3,7 @@ import logo from '../assets/scavenger.png';
 export const BigLogo = () => {
     return (
         <>
-            <img src={logo} className="max-h-[400px]" alt="icon"/>
+            <img src={logo} className="max-h-[100px] lg:max-h-[400px]" alt="icon"/>
         </>
     )
 };

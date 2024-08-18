@@ -36,8 +36,10 @@ export const LoginPage = () => {
 
     return (
         <Card className={"shadow-xl max-w-fit p-6 m-auto mt-6"}>
-            <CardTitle>Please Login</CardTitle>
-            <CardContent className={"flex flex-row items-center justify-center"}>
+            <CardHeader>
+                <CardTitle>Please Login</CardTitle>
+            </CardHeader>
+            <CardContent className={"flex flex-row items-center justify-center gap-10"}>
                 <BigLogo />
 
                 <form onSubmit={handleLogin}>
@@ -51,7 +53,13 @@ export const LoginPage = () => {
                         <Input id={"password"} type={"password"} value={password}
                                onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <Button type={"submit"} className={"mt-3"}>Login</Button>
+                    <div className={"mt-3 space-x-3 flex flex-row justify-center"}>
+                        <Button variant="default" type="submit">Login</Button>
+                        <Button variant="secondary" type="button" onClick={()=>navigate('/signup')}>Sign up</Button>
+                    </div>
+                    <div>
+                        <Button variant="ghost" type="button">Forgot username or password?</Button>
+                    </div>
                 </form>
             </CardContent>
         </Card>

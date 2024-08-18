@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { GamesPage } from "./pages/Games.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {AuthProvider} from "./hooks/useAuth.jsx";
+import {SignUpPage} from "./pages/SignUp.jsx";
 
 function App() {
     return (
@@ -11,6 +12,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/games" element={
                     <ProtectedRoute redirect="/games">
                         <GamesPage />

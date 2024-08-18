@@ -4,14 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
 import BigLogo from "../components/BigLogo.jsx";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

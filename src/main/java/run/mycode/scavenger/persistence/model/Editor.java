@@ -4,6 +4,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import jakarta.persistence.Entity;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,11 +13,12 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Collection;
 
+@Scope("session")
+@Component
 @Entity
 @Getter
 @Setter
-@Scope("session")
-@Component
+@ToString
 public class Editor implements UserDetails {
     @Id
     private Long id;
@@ -31,9 +33,6 @@ public class Editor implements UserDetails {
     private boolean accountLocked;
     private boolean forcePasswordChange;
 
-    public Editor() {
-
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

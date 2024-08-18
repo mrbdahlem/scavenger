@@ -18,7 +18,21 @@ export const SignUpPage = () => {
 
     const handleSignUp = (e) => {
         e.preventDefault();
-        console.log("Sign up");
+
+        fetch('/api/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username, password, email, firstName, lastName})
+        }).then(response => {
+            if (response.ok) {
+                navigate('/login');
+            } else {
+                console.log('Failed to sign up');
+            }
+        });
+
     };
 
     return (

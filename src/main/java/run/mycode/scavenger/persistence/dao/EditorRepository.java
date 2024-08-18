@@ -8,4 +8,6 @@ public interface EditorRepository extends JpaRepository<Editor, Long> {
 
     Editor findByUsername(String username);
 
+    boolean existsByUsername(String username);
+
 }

@@ -1,9 +1,20 @@
-import logo from '../assets/scavenger.png';
-
 import { useState } from 'react';
 import { useAuth } from "../hooks/useAuth.jsx";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+
+import BigLogo from "../components/BigLogo.jsx";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -24,26 +35,26 @@ export const LoginPage = () => {
     }
 
     return (
-        <div className={"min-h-screen min-w-full flex flex-column items-center"}>
-            <div className={"flex flex-row items-center justify-center m-auto border border-black rounded p-5 shadow-lg bg-white"}>
-                <img src={logo} className="max-h-[400px]" alt="icon"/>
-                <div>
-                    <form onSubmit={handleLogin}>
-                        <div>
-                            <label htmlFor={"username"}>Username:</label>
-                            <input id={"username"} type={"text"} value={username}
-                                   onChange={(e) => setUsername(e.target.value)} />
-                        </div>
-                        <div>
-                            <label htmlFor={"password"}>Password:</label>
-                            <input id={"password"} type={"password"} value={password}
-                                   onChange={(e) => setPassword(e.target.value)} />
-                        </div>
-                        <button type={"submit"}>Login</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <Card className={"shadow-xl max-w-fit p-6 m-auto mt-6"}>
+            <CardTitle>Please Login</CardTitle>
+            <CardContent className={"flex flex-row items-center justify-center"}>
+                <BigLogo />
+
+                <form onSubmit={handleLogin}>
+                    <div>
+                        <Label htmlFor={"username"}>Username:</Label>
+                        <Input id={"username"} type={"text"} value={username}
+                               onChange={(e) => setUsername(e.target.value)} />
+                    </div>
+                    <div>
+                        <Label htmlFor={"password"}>Password:</Label>
+                        <Input id={"password"} type={"password"} value={password}
+                               onChange={(e) => setPassword(e.target.value)} />
+                    </div>
+                    <Button type={"submit"} className={"mt-3"}>Login</Button>
+                </form>
+            </CardContent>
+        </Card>
     )
 }
 

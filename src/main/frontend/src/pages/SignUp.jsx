@@ -1,7 +1,7 @@
 import {useState} from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
@@ -79,7 +79,9 @@ export const SignUpPage = () => {
                     </Alert>}
                     <div className={"mt-3 space-x-3 flex flex-row justify-center"}>
                         <Button variant="default" type="submit">Sign Up</Button>
-                        <Button variant="secondary" type="button" onClick={() => navigate('/login')}>Login</Button>
+                        <Link to="/login">
+                            <Button variant="secondary" type="button">Login</Button>
+                        </Link>
                     </div>
                 </form>
             </CardContent>

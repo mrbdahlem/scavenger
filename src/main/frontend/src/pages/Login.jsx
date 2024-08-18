@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from "../hooks/useAuth.jsx";
-import { useSearchParams } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate} from "react-router-dom";
 
 import BigLogo from "../components/BigLogo.jsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
@@ -14,13 +13,13 @@ export const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-
     const { login } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         const user = await login(username, password)
+        console.log(user);
         if (user !== null) {
             const redirect = searchParams.get('redirect');
             navigate(redirect ? redirect : '/');
@@ -48,10 +47,14 @@ export const LoginPage = () => {
                     </div>
                     <div className={"mt-3 space-x-3 flex flex-row justify-center"}>
                         <Button variant="default" type="submit">Login</Button>
-                        <Button variant="secondary" type="button" onClick={()=>navigate('/signup')}>Sign up</Button>
+                        <Link to="/signup">
+                            <Button variant="secondary" type="button">Sign up</Button>
+                        </Link>
                     </div>
                     <div>
-                        <Button variant="ghost" type="button">Forgot username or password?</Button>
+                        {/*<Link to="/forgot">*/}
+                            <Button variant="ghost" type="button">Forgot username or password?</Button>
+                        {/*</Link>*/}
                     </div>
                 </form>
             </CardContent>

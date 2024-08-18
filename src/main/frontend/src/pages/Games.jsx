@@ -1,6 +1,6 @@
 import { useAuth } from "../hooks/useAuth";
 
-export const GamePage = () => {
+export const GamesPage = () => {
     const { logout } = useAuth();
 
     const handleLogout = () => {

@@ -8,6 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDto {
+
+    @NotNull
+    @NotEmpty
+    private String username;
+
     @NotNull
     @NotEmpty
     private String firstName;
@@ -16,12 +21,13 @@ public class UserDto {
     @NotEmpty
     private String lastName;
 
-    @NotNull
-    @NotEmpty
     private String password;
-    private String matchingPassword;
 
     @NotNull
     @NotEmpty
     private String email;
+
+    private boolean forcePasswordChange;
+    private boolean accountLocked;
+    private boolean enabled;
 }

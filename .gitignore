@@ -1,4 +1,6 @@
 HELP.md
+run.cmd
+prodtest.cmd
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

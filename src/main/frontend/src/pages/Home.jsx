@@ -8,7 +8,7 @@ export const Home = () => {
         <div className={"flex flex-row items-center min-h-screen min-w-full"}>
             <img src={logo} className="max-h-[400px]" alt="icon"/>
             <div>{user && user.username} Home</div>
-            <Link to="/game">Game</Link>
+            <Link to="/games">Game</Link>
         </div>
     )
 }

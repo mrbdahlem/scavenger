@@ -25,7 +25,7 @@ public class UserApiController {
     private final EditorService editorService;
 
 
-    public UserApiController(EditorService editorService, Editor editor) {
+    public UserApiController(EditorService editorService) {
         this.editorService = editorService;
     }
 

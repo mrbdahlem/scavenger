@@ -1,6 +1,5 @@
 import {useAuth} from "@/hooks/useAuth.jsx";
 import {Link, useNavigate} from "react-router-dom";
-import {Button} from "@/components/ui/button.tsx";
 import logo from "../assets/scavenger.png";
 
 export const Header = () => {

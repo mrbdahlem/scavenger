@@ -113,6 +113,11 @@ public class UserApiController {
         return returnDto;
     }
 
+    @GetMapping("/api/users")
+    public Iterable<UserDto> getUsers() {
+        return editorService.getAllEditors();
+    }
+
     /**
      * Check if a user exists
      * @param user the user to check

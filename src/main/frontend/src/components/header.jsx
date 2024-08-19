@@ -1,6 +1,7 @@
 import {useAuth} from "@/hooks/useAuth.jsx";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import logo from "../assets/scavenger.png";
+import {Tab} from "../components/pageTab.jsx";
 
 export const Header = () => {
 
@@ -14,25 +15,25 @@ export const Header = () => {
     }
 
     return (
-        <header className="w-full py-4 px-6 bg-white shadow-md dark:bg-zinc-800">
+        <header className="w-full px-6 bg-white shadow-md dark:bg-zinc-800">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-5">
                     <img className="h-10" src={logo} alt="Squatch Hunter Logo"/>
                 </div>
                 <div className="flex items-center space-x-5">
-                    {user.roles && user.roles.includes("ADMIN") && (
-                        <Link to="/admin">
+                    {user && user.roles && user.roles.includes("ADMIN") && (
+                        <Tab to="/admin">
                             Admin
-                        </Link>
+                        </Tab>
                     )}
-                    <Link to="/games">
+                    <Tab to="/games">
                         Games
-                    </Link>
+                    </Tab>
                 </div>
                 <div className="flex items-center space-x-5">
-                    <Link onClick = { handleLogout } to="/">
+                    <Tab onClick = { handleLogout } to="/">
                         Logout{user && " " + user.username}
-                    </Link>
+                    </Tab>
                 </div>
             </div>
         </header>

@@ -5,6 +5,7 @@ import { GamesPage } from "./pages/Games.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {AuthProvider} from "./hooks/useAuth.jsx";
 import {SignUpPage} from "./pages/SignUp.jsx";
+import {AdminPage} from "@/pages/Admin.jsx";
 
 function App() {
     return (
@@ -16,6 +17,11 @@ function App() {
                 <Route path="/games" element={
                     <ProtectedRoute redirect="/games">
                         <GamesPage />
+                    </ProtectedRoute>
+                } />
+                <Route path="/admin" element={
+                    <ProtectedRoute redirect="/admin">
+                        <AdminPage />
                     </ProtectedRoute>
                 } />
                 <Route path="*" element={

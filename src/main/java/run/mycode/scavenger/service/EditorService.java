@@ -55,7 +55,7 @@ public class EditorService {
         newEditor.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
         if (numEditors() == 0) {
-            newEditor.setRole("ADMIN");
+            newEditor.setRole("ADMIN,USER");
             newEditor.setEnabled(true);
         }
         else {
@@ -79,5 +79,9 @@ public class EditorService {
 
     public boolean emailExists(String email) {
         return editorRepository.existsByEmail(email);
+    }
+
+    public Iterable<UserDto> getAllEditors() {
+        return editorRepository.findAll().stream().map(Editor::safeDto).toList();
     }
 }

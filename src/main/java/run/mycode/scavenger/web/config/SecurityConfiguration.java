@@ -21,7 +21,9 @@ public class SecurityConfiguration {
                 // Allow all requests to / and /assets and to the signup and userexists endpoints
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/*", "/assets/**", "/api/signup", "/api/userexists").permitAll()
                         // Allow all requests to /api/** if the user is authenticated
-                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/*").authenticated()
+                        .anyRequest().authenticated()
                 )
 
                 // Disable CSRF protection

@@ -66,12 +66,19 @@ public class Editor implements UserDetails {
         return enabled;
     }
 
+    /**
+     * Create a UserDto from an Editor without including sensitive information like password
+     * @param editor the editor to convert
+     * @return the UserDto
+     */
     public static UserDto safeDto(Editor editor) {
         UserDto dto = new UserDto();
         dto.setUsername(editor.getUsername());
         dto.setFirstName(editor.getFirstName());
         dto.setLastName(editor.getLastName());
         dto.setEmail(editor.getEmail());
+
+        // Do NOT include password
 
         dto.setRoles(editor.getRole());
 

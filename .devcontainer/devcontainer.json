@@ -7,9 +7,13 @@
 
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
-			"version": "none",
-			"installMaven": "true",
-			"installGradle": "false"
+			"installMaven": true,
+			"version": "17",
+			"jdkDistro": "ms",
+			"mavenVersion": "latest",
+		},
+		"ghcr.io/devcontainers-contrib/features/mysql-homebrew:1": {
+			"version": "latest"
 		}
 	},
 
@@ -18,8 +22,8 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
-	"postCreateCommand": "sudo apt update && sudo apt install -y mariadb-server",
-	"postStartCommand": "sudo service mysql start",
+	// "postCreateCommand": "sudo apt update && sudo apt install -y mariadb-server",
+	// "postStartCommand": "sudo service mysql start",
 
 	// Configure tool-specific properties.
 	// "customizations": {},

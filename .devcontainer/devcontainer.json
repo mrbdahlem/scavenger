@@ -19,6 +19,7 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
 	"postCreateCommand": "sudo apt update && sudo apt install -y mariadb-server",
+	"postAttachCommand": "service mysql start",
 
 	// Configure tool-specific properties.
 	// "customizations": {},

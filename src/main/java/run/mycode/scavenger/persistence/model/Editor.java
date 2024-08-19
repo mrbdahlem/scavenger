@@ -7,7 +7,6 @@ import lombok.Getter;
 import jakarta.persistence.Entity;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ import java.util.Collection;
  * A hunt editor's user account
  */
 
-@Scope("session")
 @Component
 @Entity
 @Getter
@@ -43,7 +41,7 @@ public class Editor implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(role.split(":")).map(r -> (GrantedAuthority) () -> r).toList();
+        return Arrays.stream(role.split(",")).map(r -> (GrantedAuthority) () -> r).toList();
     }
 
     @Override

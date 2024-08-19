@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +16,6 @@ import run.mycode.scavenger.web.dto.UserDto;
 /**
  * Controller for user API endpoints
  */
-@Scope("session")
 @RestController
 public class UserApiController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -37,19 +35,24 @@ public class UserApiController {
     @PostMapping("/api/signin")
     public UserDto signIn(Authentication authentication) {
         Editor user = (Editor) authentication.getPrincipal();
+        logger.info("User {} signed in", user.getUsername());
 
         return Editor.safeDto(user);
     }
 
     /**
-     * Allow a user to sign out
+     * Allow a user to sign out - this will invalidate the user's session
      * @param request the HttpRequest for the sign-out
      * @param response the HttpResponse for the sign-out
      */
     @RequestMapping("/api/signout")
     public void signOut(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         if (auth != null){
+            Editor user = (Editor) auth.getPrincipal();
+            logger.info("User {} signed out", user.getUsername());
+
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
     }
@@ -103,6 +106,8 @@ public class UserApiController {
         // Create and save the new editor
         Editor newEditor = editorService.newEditor(newUser);
 
+        logger.info("New user {} signed up", newEditor.getUsername());
+
         // Return the new editor's public data
         UserDto returnDto = new UserDto();
         returnDto.setUsername(newEditor.getUsername());
@@ -113,6 +118,10 @@ public class UserApiController {
         return returnDto;
     }
 
+    /**
+     * Get a list of all users
+     * @return all users
+     */
     @GetMapping("/api/users")
     public Iterable<UserDto> getUsers() {
         return editorService.getAllEditors();

@@ -3,6 +3,7 @@ package run.mycode.scavenger.web.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -12,6 +13,7 @@ import run.mycode.scavenger.service.EditorUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfiguration {
 
     @Bean
@@ -21,7 +23,7 @@ public class SecurityConfiguration {
                 // Allow all requests to / and /assets and to the signup and userexists endpoints
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/*", "/assets/**", "/api/signup", "/api/userexists").permitAll()
                         // Allow all requests to /api/** if the user is authenticated
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/*").authenticated()
                         .anyRequest().authenticated()
                 )

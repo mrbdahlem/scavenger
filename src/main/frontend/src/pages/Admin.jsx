@@ -2,8 +2,6 @@ import {Header} from "@/components/header.jsx";
 import {useState, useEffect} from "react";
 import {userService} from "@/lib/service/user.service.js";
 import {UserTable} from "@/components/userTable.jsx";
-import {Button} from "@/components/ui/button.tsx";
-import {authHeader} from "@/lib/utils.ts";
 
 export const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -16,19 +14,12 @@ export const AdminPage = () => {
             });
     }, []);
 
-    function test() {
-        fetch('/api/admin/test', {
-            method: 'GET',
-            headers: authHeader(),
-        });
-    }
-
 return (
     <>
         <Header />
-        <div>        <Button onClick={test}>Test</Button>
+        <div className="mt-[60px] overflow-y-auto">
+            <UserTable users={users} />
         </div>
-        <UserTable users={users} />
     </>
     );
 };

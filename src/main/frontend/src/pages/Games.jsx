@@ -1,21 +1,15 @@
 import {Header} from "@/components/header.jsx";
-import {authHeader} from "@/lib/utils.ts";
 import {Button} from "@/components/ui/button.tsx";
+import {GameList} from "@/components/gameList.jsx";
 
 export const GamesPage = () => {
-
-    function test() {
-        fetch('/api/admin/test', {
-            method: 'GET',
-            headers: authHeader(),
-        });
-    }
-
     return (
         <>
-            <Header/>
-
-            <div><Button onClick={test}>Test</Button>
+            <Header>
+                <Button>+ New Game</Button>
+            </Header>
+            <div className="mt-[60px]">
+                <GameList/>
             </div>
         </>
     )

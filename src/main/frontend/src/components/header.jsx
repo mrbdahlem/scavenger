@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import logo from "../assets/scavenger.png";
 import {Tab} from "../components/pageTab.jsx";
 
-export const Header = () => {
+export const Header = ({ children }) => {
 
     const { logout, user } = useAuth();
     const navigate = useNavigate();
@@ -15,13 +15,11 @@ export const Header = () => {
     }
 
     return (
-        <header className="w-full px-6 bg-white shadow-md dark:bg-zinc-800">
+        <header className="fixed top-0 left-0 right-0 px-6 bg-white shadow-md dark:bg-zinc-800 z-50">
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-5">
-                    <img className="h-10" src={logo} alt="Squatch Hunter Logo"/>
-                </div>
-                <div className="flex items-center space-x-5">
-                    {user && user.roles && user.roles.includes("ADMIN") && (
+                    <img className="h-10" src={logo} alt="Squatch Hunter Logo"/>{
+                    user && user.roles && user.roles.includes("ADMIN") && (
                         <Tab to="/admin">
                             Admin
                         </Tab>
@@ -29,6 +27,9 @@ export const Header = () => {
                     <Tab to="/games">
                         Games
                     </Tab>
+                </div>
+                <div className="flex items-center space-x-5">
+                    { children }
                 </div>
                 <div className="flex items-center space-x-5">
                     <Tab onClick = { handleLogout } to="/">

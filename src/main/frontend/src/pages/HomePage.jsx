@@ -4,7 +4,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx
 import BigLogo from "@/components/BigLogo.jsx";
 import {Button} from "@/components/ui/button.tsx";
 
-export const Home = () => {
+export const HomePage = () => {
     const { user } = useAuth();
     return (
         <Card className={"shadow-xl max-w-fit p-6 m-auto mt-6"}>
@@ -29,4 +29,4 @@ export const Home = () => {
     )
 }
 
-export default Home;
+export default HomePage;

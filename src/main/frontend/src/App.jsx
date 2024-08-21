@@ -1,17 +1,18 @@
 import { Routes, Route , Navigate} from "react-router-dom";
-import { LoginPage } from "./pages/Login";
-import { Home } from "./pages/Home";
-import { GamesPage } from "./pages/Games.jsx";
+import { LoginPage } from "./pages/LoginPage.jsx";
+import { HomePage } from "./pages/HomePage.jsx";
+import { GamesPage } from "./pages/GamesPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {AuthProvider} from "./hooks/useAuth.jsx";
-import {SignUpPage} from "./pages/SignUp.jsx";
+import {SignUpPage} from "@/pages/SignUpPage.jsx";
 import {AdminPage} from "@/pages/Admin.jsx";
+import {GamePage} from "@/pages/GamePage.jsx";
 
 function App() {
     return (
         <AuthProvider>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/games" element={
@@ -24,10 +25,14 @@ function App() {
                         <AdminPage />
                     </ProtectedRoute>
                 } />
+                <Route path="/game" element={
+                    <ProtectedRoute redirect="/game">
+                        <GamePage />
+                    </ProtectedRoute>
+                } />
                 <Route path="*" element={
                     <Navigate to="/" />
-                }
-                />
+                } />
             </Routes>
         </AuthProvider>
     )

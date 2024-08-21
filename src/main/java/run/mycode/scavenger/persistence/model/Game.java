@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 @Scope("session")
@@ -25,4 +26,14 @@ public class Game {
 
     @ManyToOne(fetch= FetchType.LAZY, optional = false)
     private Editor owner;
+
+    /**
+     * Check if the given editor is the owner of this game or the game has been shared with them
+     * @param editor the editor to check
+     * @return true if the editor can edit this game
+     */
+    public boolean isEditor(Editor editor) {
+
+        return owner.getId().equals(editor.getId()) || editor.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+    }
 }

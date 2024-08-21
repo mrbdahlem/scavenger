@@ -22,7 +22,8 @@
 	"postCreateCommand": { 
 		"db": "bash -i -c 'sudo apt update && sudo apt install -y mariadb-server'",
 		// "prep": "cd /home/vscode/workspaces/scavenger && mvn compile",
-		"node": "bash -i -c 'nvm install node'"
+		"node": "bash -i -c 'nvm install node'",
+		"mavendeps": "mvn dependency:resolve"
 	},
 	"postAttachCommand": "sudo /etc/init.d/mariadb start",
 

@@ -45,14 +45,16 @@ export const GamePage = () => {
         setUnsavedChanges(true);
     }
 
-    const shouldBlock = React.useCallback(
-        ({ currentLocation, nextLocation }) =>
-        unsavedChanges &&
-        currentLocation.pathname !== nextLocation.pathname
-        , [unsavedChanges])
+    // const shouldBlock = React.useCallback(
+    //     ({ currentLocation, nextLocation }) =>
+    //     unsavedChanges &&
+    //     currentLocation.pathname !== nextLocation.pathname
+    //     , [unsavedChanges])
 
     // Block navigating elsewhere when data has been entered into the input
-    const blocker = useBlocker(shouldBlock);
+    const blocker = useBlocker(({ currentLocation, nextLocation }) =>
+        unsavedChanges &&
+        currentLocation.pathname !== nextLocation.pathname);
 
 
     return (

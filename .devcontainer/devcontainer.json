@@ -21,7 +21,7 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
 	"postCreateCommand": "sudo apt update && sudo apt install -y mariadb-server && cd /home/vscode/workspaces/scavenger && mvn compile",
-	"postStartCommand": "sudo /etc/init.d/mariadb start",
+	"postAttachCommand": "sudo /etc/init.d/mariadb start",
 
 	// Configure tool-specific properties.
 	// "customizations": {},

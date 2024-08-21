@@ -1,5 +1,5 @@
 import {useBlocker, useSearchParams} from "react-router-dom";
-import {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef} from "react";
 
 import {Header} from "@/components/header.jsx";
 import {Input} from "@/components/ui/input";
@@ -45,18 +45,22 @@ export const GamePage = () => {
         setUnsavedChanges(true);
     }
 
-    // Block navigating elsewhere when data has been entered into the input
-    let blocker = useBlocker(
+    const shouldBlock = React.useCallback(
         ({ currentLocation, nextLocation }) =>
-            unsavedChanges &&
-            currentLocation.pathname !== nextLocation.pathname
-    );
+        unsavedChanges &&
+        currentLocation.pathname !== nextLocation.pathname
+        , [unsavedChanges])
+
+    // Block navigating elsewhere when data has been entered into the input
+    const blocker = useBlocker(shouldBlock);
+
 
     return (
         <>
-            {blocker.state === "blocked" ? (
-                <div>
-                    <p>Your changes haven't been saved.</p>
+            {
+            blocker.state === "blocked" ?
+                <div className="absolute top-[80px] mx-auto z-50 bg-slate-300 w-[300px]">
+                    <p>Your changes have not been saved.</p>
                     <button onClick={() => blocker.proceed()}>
                         Proceed
                     </button>
@@ -64,7 +68,8 @@ export const GamePage = () => {
                         Cancel
                     </button>
                 </div>
-            ) : null}
+                : null
+            }
 
             <div className="w-[900px] mx-auto">
                 <Header>

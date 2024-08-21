@@ -21,7 +21,6 @@
 	// "postCreateCommand": "java -version",
 	"postCreateCommand": { 
 		"db": "bash -i -c 'sudo apt update && sudo apt install -y mariadb-server && /workspaces/scavenger/builddb.sh'",
-		// "prep": "cd /home/vscode/workspaces/scavenger && mvn compile",
 		"node": "bash -i -c 'nvm install node'",
 		"mavendeps": "mvn dependency:resolve"
 	},

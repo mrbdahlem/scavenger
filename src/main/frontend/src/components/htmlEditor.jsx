@@ -11,10 +11,11 @@ export const Editor = ({ initialContent }) => {
             placeholder: 'Start typing...',
             statusbar: false,
             toolbarAdaptive: false,
-            buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'superscript', 'subscript', '|',  'ul', 'ol',
-                '|', 'font', 'fontsize', 'paragraph', '|', 'align', 'indent', 'outdent', '|', 'image', 'link', 'brush',
-                '|', 'spellcheck', 'source'],
+            buttons: ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'brush', '|',
+                'ul', 'ol', '|', 'font', 'fontsize', 'paragraph', '|', 'align', 'indent', 'outdent', '|', 'image',
+                'link', '|', 'spellcheck', 'source'],
             addNewLine: false,
+            spellcheck: true,
         }},
         [initialContent]
     );

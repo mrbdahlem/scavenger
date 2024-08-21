@@ -10,7 +10,7 @@
 			"installMaven": "true"
 		},
 		"ghcr.io/devcontainers/features/node:1": {
-		},
+		}
 
 	},
 
@@ -20,7 +20,7 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
 	"postCreateCommand": { 
-		"db": "bash -i -c 'sudo apt update && sudo apt install -y mariadb-server'",
+		"db": "bash -i -c 'sudo apt update && sudo apt install -y mariadb-server && ./builddb.sh'",
 		// "prep": "cd /home/vscode/workspaces/scavenger && mvn compile",
 		"node": "bash -i -c 'nvm install node'",
 		"mavendeps": "mvn dependency:resolve"

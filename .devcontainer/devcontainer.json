@@ -6,8 +6,11 @@
 	"image": "mcr.microsoft.com/devcontainers/java:1-17-bookworm",
 
 	"features": {
-		"ghcr.io/devcontainers/features/java:1": {},
-		"ghcr.io/devcontainers/features/node:1": {},
+		"ghcr.io/devcontainers/features/java:1": {
+			"installMaven": "true"
+		},
+		"ghcr.io/devcontainers/features/node:1": {
+		},
 
 	},
 
@@ -16,8 +19,9 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
-	"postCreateCommand": [ "sudo apt update && sudo apt install -y mariadb-server maven",
-	"cd /home/vscode/workspaces/scavenger && mvn compile", "nvm install node"],
+	"postCreateCommand": [ "sudo apt update && sudo apt install -y mariadb-server",
+		"cd /home/vscode/workspaces/scavenger && mvn compile",
+		". ${NVM_DIR}/nvm.sh && nvm install --lts"],
 	"postAttachCommand": "sudo /etc/init.d/mariadb start",
 
 	// Configure tool-specific properties.

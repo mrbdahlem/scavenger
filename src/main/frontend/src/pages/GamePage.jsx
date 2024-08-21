@@ -12,6 +12,7 @@ export const GamePage = () => {
     const editor = useRef();
 
     const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
 
     useEffect (() => {
         if (gameId === "new") {
@@ -25,9 +26,9 @@ export const GamePage = () => {
         setName(e.target.value);
     }
 
-    const handleDescriptionChange = (e) => {
-        setDescription(e.target.value);
-    }
+    // const handleDescriptionChange = (e) => {
+    //     setDescription(e.target.value);
+    // }
 
     return (
         <div className="w-[900px] mx-auto">
@@ -39,7 +40,7 @@ export const GamePage = () => {
                 <Label htmlFor={"name"}>Name:</Label>
                 <Input id={"name"} type={"text"} value={name} onChange={handleNameChange}/>
                 <Label>Description:
-                <Editor ref={editor} value={description} />
+                <Editor value={description} />
                 </Label>
             </div>
         </div>

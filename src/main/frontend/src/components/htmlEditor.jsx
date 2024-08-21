@@ -1,55 +1,34 @@
-import React, { forwardRef, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
+import JoditEditor from 'jodit-react';
 
-// Editor is an uncontrolled React component
-const Editor = forwardRef(
-    ({ readOnly, defaultValue, onTextChange, onSelectionChange }, ref) => {
-        const containerRef = useRef(null);
-        const defaultValueRef = useRef(defaultValue);
-        const onTextChangeRef = useRef(onTextChange);
-        const onSelectionChangeRef = useRef(onSelectionChange);
+export const Editor = ({ initialContent }) => {
+    const editor = useRef(null);
+    const [content, setContent] = useState(initialContent || '');
 
-        useLayoutEffect(() => {
-            onTextChangeRef.current = onTextChange;
-            onSelectionChangeRef.current = onSelectionChange;
-        });
+    const config = useMemo(() => {
+        return {
+            readonly: false, // all options from https://xdsoft.net/jodit/docs/,
+            placeholder: 'Start typing...',
+            statusbar: false,
+            toolbarAdaptive: false,
+            buttons: ['bold', 'italic', 'underline', 'strikethrough', '|', 'superscript', 'subscript', '|',  'ul', 'ol',
+                '|', 'font', 'fontsize', 'paragraph', '|', 'align', 'indent', 'outdent', '|', 'image', 'link', 'brush',
+                '|', 'spellcheck', 'source'],
+            addNewLine: false,
+        }},
+        [initialContent]
+    );
 
-        useEffect(() => {
-            ref.current?.enable(!readOnly);
-        }, [ref, readOnly]);
-
-        useEffect(() => {
-            const container = containerRef.current;
-            const editorContainer = container.appendChild(
-                container.ownerDocument.createElement('div'),
-            );
-            const quill = new Quill(editorContainer, {
-                theme: 'snow',
-            });
-
-            ref.current = quill;
-
-            if (defaultValueRef.current) {
-                quill.setContents(defaultValueRef.current);
-            }
-
-            quill.on(Quill.events.TEXT_CHANGE, (...args) => {
-                onTextChangeRef.current?.(...args);
-            });
-
-            quill.on(Quill.events.SELECTION_CHANGE, (...args) => {
-                onSelectionChangeRef.current?.(...args);
-            });
-
-            return () => {
-                ref.current = null;
-                container.innerHTML = '';
-            };
-        }, [ref]);
-
-        return <div ref={containerRef}></div>;
-    },
-);
-
-Editor.displayName = 'Editor';
+    return (
+        <JoditEditor
+            ref={editor}
+            value={content}
+            config={config}
+            tabIndex={1} // tabIndex of textarea
+            onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
+            onChange={newContent => {}}
+        />
+    );
+};
 
 export default Editor;

@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import {useBlocker, useSearchParams} from "react-router-dom";
 import {useEffect, useState, useRef} from "react";
 
 import {Header} from "@/components/header.jsx";
@@ -11,6 +11,7 @@ export const GamePage = () => {
     const gameId = searchParams.get("id");
     const editor = useRef();
 
+    const [unsavedChanges, setUnsavedChanges] = useState(false);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
 
@@ -22,27 +23,63 @@ export const GamePage = () => {
         }
     }, [gameId]);
 
-    const handleNameChange = (e) => {
-        setName(e.target.value);
+    useEffect(() => {
+        window.addEventListener('beforeunload', alertUser)
+        return () => {
+            window.removeEventListener('beforeunload', alertUser)
+        }
+    }, [unsavedChanges]);
+
+    const alertUser = e => {
+        e.preventDefault()
+        e.returnValue = ''
     }
 
-    // const handleDescriptionChange = (e) => {
-    //     setDescription(e.target.value);
-    // }
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+        setUnsavedChanges(true);
+    }
+
+    const handleDescriptionChange = (e) => {
+        setDescription(e);
+        setUnsavedChanges(true);
+    }
+
+    // Block navigating elsewhere when data has been entered into the input
+    let blocker = useBlocker(
+        ({ currentLocation, nextLocation }) =>
+            unsavedChanges &&
+            currentLocation.pathname !== nextLocation.pathname
+    );
 
     return (
-        <div className="w-[900px] mx-auto">
-            <Header>
-                <h1>Game {name}</h1>
-            </Header>
-            <div className="mt-[60px]">
-                <p>Game: {gameId}</p>
-                <Label htmlFor={"name"}>Name:</Label>
-                <Input id={"name"} type={"text"} value={name} onChange={handleNameChange}/>
-                <Label>Description:
-                <Editor value={description} />
-                </Label>
+        <>
+            {blocker.state === "blocked" ? (
+                <div>
+                    <p>Your changes haven't been saved.</p>
+                    <button onClick={() => blocker.proceed()}>
+                        Proceed
+                    </button>
+                    <button onClick={() => blocker.reset()}>
+                        Cancel
+                    </button>
+                </div>
+            ) : null}
+
+            <div className="w-[900px] mx-auto">
+                <Header>
+                    <h1>Game: {name}</h1>
+                </Header>
+                <div className="mt-[60px]">
+                    <Label htmlFor={"name"}>Name:</Label>
+                    <Input id={"name"} type={"text"} value={name} className="text-2xl" onChange={handleNameChange}
+                           placeholder="Give your game a name..."/>
+                    <Label>Description:
+                        <Editor value={handleDescriptionChange} onChange={setDescription} placeholder="Enter the description and rules for your game..."/>
+                    </Label>
+                </div>
+                <p className="mt-5">Game id: {gameId}</p>
             </div>
-        </div>
+    </>
     )
 }

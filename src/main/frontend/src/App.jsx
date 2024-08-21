@@ -1,4 +1,4 @@
-import { Routes, Route , Navigate} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Routes, Route , Navigate} from "react-router-dom";
 import { LoginPage } from "./pages/LoginPage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { GamesPage } from "./pages/GamesPage.jsx";
@@ -9,9 +9,9 @@ import {AdminPage} from "@/pages/Admin.jsx";
 import {GamePage} from "@/pages/GamePage.jsx";
 
 function App() {
-    return (
-        <AuthProvider>
-            <Routes>
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
@@ -33,7 +33,12 @@ function App() {
                 <Route path="*" element={
                     <Navigate to="/" />
                 } />
-            </Routes>
+            </>
+        ));
+
+    return (
+        <AuthProvider>
+            <RouterProvider router={router} />
         </AuthProvider>
     )
 }

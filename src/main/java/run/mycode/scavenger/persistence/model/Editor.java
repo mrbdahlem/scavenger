@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import run.mycode.scavenger.web.dto.UserDto;
@@ -41,7 +42,7 @@ public class Editor implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(role.split(",")).map(r -> (GrantedAuthority) () -> r).toList();
+        return Arrays.stream(role.split(",")).map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override

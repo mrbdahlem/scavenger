@@ -20,9 +20,10 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
 	"postCreateCommand": { 
-		"db": "sudo apt update && sudo apt install -y mariadb-server",
-		"prep": "cd /home/vscode/workspaces/scavenger && mvn compile",
-		"node": ". ${NVM_DIR}/nvm.sh && nvm install --lts"},
+		"db": "bash -i -c 'sudo apt update && sudo apt install -y mariadb-server'",
+		// "prep": "cd /home/vscode/workspaces/scavenger && mvn compile",
+		"node": "bash -i -c 'nvm install --lts'"
+	},
 	"postAttachCommand": "sudo /etc/init.d/mariadb start",
 
 	// Configure tool-specific properties.

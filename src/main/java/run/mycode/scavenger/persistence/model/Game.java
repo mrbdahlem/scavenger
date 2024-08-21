@@ -27,6 +27,9 @@ public class Game {
     @ManyToOne(fetch= FetchType.LAZY, optional = false)
     private Editor owner;
 
+    private int numPlays;
+    private int numCompletions;
+
     /**
      * Check if the given editor is the owner of this game or the game has been shared with them
      * @param editor the editor to check

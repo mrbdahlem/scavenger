@@ -47,4 +47,23 @@ public class GameService {
         return gameRepo.save(game);
     }
 
+    public int addPlay(Game game) {
+        int plays = game.getNumPlays() + 1;
+
+        game.setNumPlays(plays);
+
+        gameRepo.save(game);
+
+        return plays;
+    }
+
+    public int addCompletion(Game game) {
+        int comps = game.getNumCompletions() + 1;
+
+        game.setNumPlays(comps);
+
+        gameRepo.save(game);
+
+        return comps;
+    }
 }

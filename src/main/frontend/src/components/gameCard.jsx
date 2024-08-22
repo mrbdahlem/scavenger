@@ -1,7 +1,7 @@
 import {Card, CardTitle, CardHeader, CardFooter, CardContent, CardDescription} from "@/components/ui/card";
 
 
-export const GameListItem = ({ game, className, onClick }) => {
+export const GameCard = ({ game, className, onClick }) => {
     return (
         <Card className={className} onClick={onClick}>
             <CardHeader>

@@ -1,5 +1,7 @@
 package run.mycode.scavenger.persistence.model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +10,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import run.mycode.scavenger.web.dto.GameDto;
+import run.mycode.scavenger.web.dto.TaskDto;
 
-@Scope("session")
+
 @Component
 @Entity
 @Getter
@@ -27,6 +30,9 @@ public class Game {
 
     @ManyToOne(fetch= FetchType.LAZY, optional = false)
     private Editor owner;
+
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
+    private List<Task> tasks;
 
     private int numPlays;
     private int numCompletions;

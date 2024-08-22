@@ -9,7 +9,7 @@ export const GamesPage = () => {
     return (
         <>
             <Header>
-                <Button onClick={()=>navigate("/Game?id=new")}>+ New Game</Button>
+                <Button onClick={()=>navigate("/Game?id=-1")}>+ New Game</Button>
             </Header>
             <div className="mt-[60px]">
                 <GameList/>

@@ -8,23 +8,28 @@ import Editor from '@/components/htmlEditor.jsx';
 import {Alert, AlertDescription} from "@/components/ui/alert";
 import {Button} from "@/components/ui/button";
 import {gameService} from "@/lib/service/game.service.js";
+import {TaskList} from "@/components/taskList.jsx";
 
 export const GamePage = () => {
     const [searchParams] = useSearchParams();
-    const [gameId, setGameId] = useState(searchParams.get("id") || "new");
+    const [gameId, setGameId] = useState(searchParams.get("id") || -1);
 
     const [loaded, setLoaded] = useState(false);
 
     const [unsavedChanges, setUnsavedChanges] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [tasks, setTasks] = useState([]);
 
-    const alertUser = e => {
-        e.preventDefault()
-        e.returnValue = ''
-    }
 
-    useEffect(() => {
+
+    // Alert the user when they try to navigate away with unsaved changes
+    useEffect(() => { 
+        const alertUser = e => {
+            e.preventDefault()
+            e.returnValue = ''
+        }
+        
         if (unsavedChanges) {
             window.addEventListener('beforeunload', alertUser);
             return () => {
@@ -43,6 +48,7 @@ export const GamePage = () => {
             currentLocation.pathname !== nextLocation.pathname
     );
 
+    // Save the game data to the server
     const saveGame = async () => {
         const data = await gameService.saveGame({id: gameId, title: title, description: description});
 
@@ -88,11 +94,13 @@ export const GamePage = () => {
 
     })
 
+    // The game title changed
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
         setUnsavedChanges(true);
     }
 
+    // The game description changed
     const handleDescriptionChange = (desc) => {
         setDescription(desc);
         setUnsavedChanges(true);
@@ -101,7 +109,7 @@ export const GamePage = () => {
     return (
         loaded &&
         <>
-            <div className="w-[900px] mx-auto">
+            <div className="w-[480px] md:w-[600px] lg:w-[900px] mx-auto">
                 <Header>
                     {blocker.state === "blocked" ? (
                         <Alert className="bg-red-100 border-red-600">
@@ -127,7 +135,12 @@ export const GamePage = () => {
                                 placeholder="Enter the description and rules for your game..."/>
                     </Label>
                 </div>
-                <p className="mt-5">Game id: {gameId}</p>
+                {
+                    gameId !== "new" && gameId > 0 &&
+                    <>                        
+                        <TaskList gameId={gameId} tasks={tasks} onChange={setTasks}/>
+                    </>
+                }
             </div>
     </>
     )

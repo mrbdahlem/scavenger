@@ -4,7 +4,8 @@ import { authHeader } from '../utils.ts';
 export const gameService = {
     gamesList,
     saveGame,
-    loadGame
+    loadGame,
+    addTask
 };
 
 function gamesList() {
@@ -48,6 +49,15 @@ function createGame(game) {
     };
 
     return fetch(`${config.apiUrl}/games/new`, requestOptions).then(handleResponse);
+}
+
+function addTask(gameId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${config.apiUrl}/games/${gameId}/newTask`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

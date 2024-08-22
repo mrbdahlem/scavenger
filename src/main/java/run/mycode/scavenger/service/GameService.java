@@ -1,10 +1,13 @@
 package run.mycode.scavenger.service;
 
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.mycode.scavenger.persistence.dao.GameRepository;
+import run.mycode.scavenger.persistence.dao.TaskRepository;
 import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.persistence.model.Game;
+import run.mycode.scavenger.persistence.model.Task;
 
 import java.util.Collection;
 
@@ -13,9 +16,11 @@ import java.util.Collection;
 public class GameService {
 
     private final GameRepository gameRepo;
+    private final TaskRepository taskRepo;
 
-    public GameService(GameRepository gameRepo) {
+    public GameService(GameRepository gameRepo, TaskRepository taskRepo) {
         this.gameRepo = gameRepo;
+        this.taskRepo = taskRepo;
     }
 
     public Game createGame(String title, String description, Editor owner) {
@@ -67,5 +72,14 @@ public class GameService {
         gameRepo.save(game);
 
         return comps;
+    }
+
+    public Task createTask(Game game) {
+        final Task task = new Task();
+        task.setGame(game);
+        task.setTitle("New Task");
+        task.setDescription("");
+
+        return taskRepo.save(task);
     }
 }

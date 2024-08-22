@@ -11,6 +11,8 @@ import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.persistence.model.Game;
 import run.mycode.scavenger.service.GameService;
 import run.mycode.scavenger.web.dto.GameDto;
+import run.mycode.scavenger.persistence.model.Task;
+import run.mycode.scavenger.web.dto.TaskDto;
 
 import java.util.stream.Collectors;
 
@@ -46,7 +48,7 @@ public class GameApiController {
         Editor editor = (Editor)auth.getPrincipal();
         
         //TODO: OWASP Filter description
-        Game newGame =  gameService.createGame(gameData.getTitle(), gameData.getDescription(), editor).toDto();
+        GameDto newGame =  gameService.createGame(gameData.getTitle(), gameData.getDescription(), editor).toDto();
 
         logger.info ("{} created a new game with id {}", editor.getUsername(), newGame.getId());
         return newGame;
@@ -87,6 +89,27 @@ public class GameApiController {
         return gameService.updateGame(game).toDto();
     }
 
+    @GetMapping("/api/games/{id}/tasks")
+    public Iterable<TaskDto> getTasks(@PathVariable Long id, Authentication auth) {
+        Editor editor = (Editor)auth.getPrincipal();
+
+        Game game = loadGameAndVerifyEditor(id, editor);
+
+        return game.getTasks().stream().map(Task::toDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/games/{id}/newTask")
+    public TaskDto newTask(@PathVariable Long id, Authentication auth) {
+        Editor editor = (Editor)auth.getPrincipal();
+
+        Game game = loadGameAndVerifyEditor(id, editor);
+
+        Task task = gameService.createTask(game);
+
+        return task.toDto();
+    }
+
+
     /**
      * Load a game, making sure that it exists and that the current user is allowed to edit it
      * @param id the id of the game to check
@@ -100,10 +123,11 @@ public class GameApiController {
         if (game == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game " + id + " not found.");
         }
-        
 
         if (!game.isEditor(editor)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this game.");
         }
+
+        return game;
     }
 }

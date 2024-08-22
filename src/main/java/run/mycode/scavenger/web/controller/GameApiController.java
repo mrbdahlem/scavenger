@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.persistence.model.Game;
-import run.mycode.scavenger.service.EditorService;
 import run.mycode.scavenger.service.GameService;
 import run.mycode.scavenger.web.dto.GameDto;
 
@@ -22,7 +21,7 @@ public class GameApiController {
 
     private final GameService gameService;
 
-    public GameApiController(EditorService editorService, GameService gameService) {
+    public GameApiController(GameService gameService) {
         this.gameService = gameService;
     }
 
@@ -43,27 +42,47 @@ public class GameApiController {
      * @return the new game
      */
     @PostMapping("/api/games/new")
-    public Game newGame(@RequestBody GameDto gameData, Authentication auth) {
+    public GameDto newGame(@RequestBody GameDto gameData, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
-        return gameService.createGame(gameData.getTitle(), gameData.getDescription(), editor);
+        //TODO: OWASP Filter description
+        return gameService.createGame(gameData.getTitle(), gameData.getDescription(), editor).toDto();
     }
 
     @GetMapping("/api/games/{id}")
-    public Game getGame(@PathVariable Long id, Authentication auth) {
+    public GameDto getGame(@PathVariable Long id, Authentication auth) {
+        Editor editor = (Editor)auth.getPrincipal();
+
+        logger.info("{} getting game with id {}", editor.getUsername(), id);
+
+        Game game = gameService.getGame(id);
+
+        verifyGameOwner(id, game, editor);
+
+        return gameService.getGame(id).toDto();
+    }
+
+    @PostMapping("/api/games/{id}")
+    public GameDto updateGame(@PathVariable Long id, @RequestBody GameDto gameData, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
         Game game = gameService.getGame(id);
 
+        verifyGameOwner(id, game, editor);
+
+        game.setTitle(gameData.getTitle());
+        game.setDescription(gameData.getDescription()); // TODO: OWASP Filter description
+
+        return gameService.updateGame(game).toDto();
+    }
+
+    private static void verifyGameOwner(Long id, Game game, Editor editor) {
         if (game == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game not found.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game " + id + " not found.");
         }
 
         if (!game.isEditor(editor)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this game.");
         }
-
-        return gameService.getGame(id);
     }
-
 }

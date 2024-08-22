@@ -27,7 +27,7 @@ function loadGame(id) {
 
 function saveGame(game) {
 
-    if (!game.id) {
+    if (!game.id || game.id === "new" || game.id < 0 ) {
         return createGame(game);
     }
     const requestOptions = {
@@ -36,7 +36,7 @@ function saveGame(game) {
         body: JSON.stringify(game)
     };
 
-    return fetch(`${config.apiUrl}/games`, requestOptions).then(handleResponse);
+    return fetch(`${config.apiUrl}/games/` + game.id, requestOptions).then(handleResponse);
 }
 
 function createGame(game) {

@@ -11,11 +11,14 @@ import {gameService} from "@/lib/service/game.service.js";
 
 export const GamePage = () => {
     const [searchParams] = useSearchParams();
-    const [gameId, setGameId]= useState( searchParams.get("id"));
+    const [gameId, setGameId] = useState(searchParams.get("id") || "new");
+
+    const [loaded, setLoaded] = useState(false);
 
     const [unsavedChanges, setUnsavedChanges] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+
     const alertUser = e => {
         e.preventDefault()
         e.returnValue = ''
@@ -41,7 +44,7 @@ export const GamePage = () => {
     );
 
     const saveGame = async () => {
-        const data = await gameService.saveGame({title: title, description: description});
+        const data = await gameService.saveGame({id: gameId, title: title, description: description});
 
         if (data.id) {
             setGameId(data.id);
@@ -68,13 +71,22 @@ export const GamePage = () => {
         if (gameId === "new") {
             setTitle("");
             setDescription("");
+            setLoaded(true)
         } else {
             // fetch game data
             gameService.loadGame(gameId).then(data => {
-                setTitle(data.title);
-                setDescription(data.description);
+                console.log(data);
+                setGameId(data.id || -1);
+                setTitle(data.title || "");
+                setDescription(data.description || "");
+                setUnsavedChanges(false);
+                setLoaded(true);
             });
         }},[gameId]);
+
+    useEffect(() => {
+
+    })
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -87,6 +99,7 @@ export const GamePage = () => {
     }
 
     return (
+        loaded &&
         <>
             <div className="w-[900px] mx-auto">
                 <Header>
@@ -110,7 +123,7 @@ export const GamePage = () => {
                     <Input id={"title"} type={"text"} value={title} className="text-2xl" onChange={handleTitleChange}
                            placeholder="Give your game a name..."/>
                     <Label>Description and Rules:
-                        <Editor value={handleDescriptionChange} onChange={setDescription}
+                        <Editor content={description} onChange={handleDescriptionChange}
                                 placeholder="Enter the description and rules for your game..."/>
                     </Label>
                 </div>

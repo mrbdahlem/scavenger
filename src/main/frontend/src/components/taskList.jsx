@@ -12,6 +12,7 @@ export const TaskList = ({gameId, tasks, onChange}) => {
         gameService.addTask(gameId).then(data => {
             //setTaskList([...taskList, {id: data.id, name: data.title, description: data.description}]);
             onChange([...taskList, {id: data.id, name: data.title, description: data.description}]);
+            console.log(data);
         });
     };
 
@@ -20,6 +21,7 @@ export const TaskList = ({gameId, tasks, onChange}) => {
             <Button onClick={addTask}>+ Create New Task</Button>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {taskList.map((task) => (
+                    console.log("Task", task),
                     <TaskCard key={task.id} taskName={task.name} taskDescription={task.description} />
                 ))}
             </div>

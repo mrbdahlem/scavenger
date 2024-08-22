@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 public class TaskDto {
     private Long id;
-    private String title;
+    private String name;
     private String description;
 
     @NotNull
@@ -21,7 +21,7 @@ public class TaskDto {
 
     public TaskDto(Long id, String title, String description, Long gameId) {
         this.id = id;
-        this.title = title;
+        this.name = title;
         this.description = description;
         this.gameId = gameId;
     }

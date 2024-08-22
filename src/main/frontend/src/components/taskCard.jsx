@@ -4,6 +4,8 @@ import {Card, CardTitle, CardHeader, CardFooter, CardContent, CardDescription} f
 import {Button} from "@/components/ui/button";
 
 export const TaskCard = ({taskName, taskDescription, onChange}) => {
+    console.log(taskName);
+    console.log(taskDescription);
     const [name, setName] = useState(taskName);
     const [description, setDescription] = useState(taskDescription);
 

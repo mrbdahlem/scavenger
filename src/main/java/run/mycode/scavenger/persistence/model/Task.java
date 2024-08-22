@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import run.mycode.scavenger.web.dto.TaskDto;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Component
 @Entity
@@ -19,6 +21,8 @@ public class Task {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "game_id_sequence")
     private Long id;
 
+    @NotNull
+    @NotEmpty
     private String title;
 
     @Column(columnDefinition="TEXT")

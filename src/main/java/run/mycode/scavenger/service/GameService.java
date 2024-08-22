@@ -1,6 +1,9 @@
 package run.mycode.scavenger.service;
 
+import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.mycode.scavenger.persistence.dao.GameRepository;
@@ -9,11 +12,10 @@ import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.persistence.model.Game;
 import run.mycode.scavenger.persistence.model.Task;
 
-import java.util.Collection;
-
 @Service
 @Transactional
 public class GameService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final GameRepository gameRepo;
     private final TaskRepository taskRepo;
@@ -80,6 +82,9 @@ public class GameService {
         task.setTitle("New Task");
         task.setDescription("");
 
-        return taskRepo.save(task);
+        final Task newTask = taskRepo.save(task);
+        logger.info("Creating new task {} in game {} for {}", newTask.getId(), game.getId(), game.getOwner().getUsername());
+
+        return newTask;
     }
 }

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import run.mycode.scavenger.web.dto.GameDto;
 import run.mycode.scavenger.web.dto.TaskDto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 
 @Component
 @Entity

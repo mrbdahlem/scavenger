@@ -29,7 +29,7 @@ export const GamePage = () => {
             e.preventDefault()
             e.returnValue = ''
         }
-        
+
         if (unsavedChanges) {
             window.addEventListener('beforeunload', alertUser);
             return () => {
@@ -87,6 +87,10 @@ export const GamePage = () => {
                 setDescription(data.description || "");
                 setUnsavedChanges(false);
                 setLoaded(true);
+            });
+            gameService.getTasks(gameId).then(data => {
+                setTasks(data);
+                console.log(data);
             });
         }},[gameId]);
 

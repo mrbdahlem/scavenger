@@ -2,7 +2,9 @@ import config from '../../../config.js';
 import { authHeader } from '../utils.ts';
 
 export const gameService = {
-    gamesList
+    gamesList,
+    saveGame,
+    loadGame
 };
 
 function gamesList() {
@@ -12,6 +14,39 @@ function gamesList() {
     };
 
     return fetch(`${config.apiUrl}/games`, requestOptions).then(handleResponse);
+}
+
+function loadGame(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${config.apiUrl}/games/${id}`, requestOptions).then(handleResponse);
+}
+
+function saveGame(game) {
+
+    if (!game.id || game.id === "new" || game.id < 0 ) {
+        return createGame(game);
+    }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify(game)
+    };
+
+    return fetch(`${config.apiUrl}/games/` + game.id, requestOptions).then(handleResponse);
+}
+
+function createGame(game) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify(game)
+    };
+
+    return fetch(`${config.apiUrl}/games/new`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

@@ -1,9 +1,9 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, {useState, useMemo} from 'react';
 import JoditEditor from 'jodit-react';
 
-export const Editor = ({ initialContent, placeholder, onChange }) => {
-    const editor = useRef(null);
-    const [content, setContent] = useState(initialContent || '');
+export const Editor = ({ content, placeholder, onChange, ref }) => {
+    //const editor = useRef(null);
+    const [value, setValue] = useState(content || '');
 
     const config = useMemo(() => {
         return {
@@ -16,12 +16,16 @@ export const Editor = ({ initialContent, placeholder, onChange }) => {
                 'link', '|', 'spellcheck', 'source'],
             addNewLine: false,
             spellcheck: true,
+            height: -1,
+            allowResizeX: false,
+            allowResizeY: true,
+
         }},
-        [initialContent, placeholder]
+        [placeholder]
     );
 
     const handleChanges = (newContent) => {
-        setContent(newContent);
+        setValue(newContent);
         if (onChange) {
             onChange(newContent);
         }
@@ -29,8 +33,8 @@ export const Editor = ({ initialContent, placeholder, onChange }) => {
 
     return (
         <JoditEditor
-            ref={editor}
-            value={content}
+            ref={ref}
+            value={value}
             config={config}
 
             tabIndex={-1} // tabIndex of textarea

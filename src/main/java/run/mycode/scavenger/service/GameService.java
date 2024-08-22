@@ -23,6 +23,8 @@ public class GameService {
         game.setTitle(title);
         game.setDescription(description);
         game.setOwner(owner);
+        game.setNumPlays(0);
+        game.setNumCompletions(0);
 
         return gameRepo.save(game);
     }

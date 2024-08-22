@@ -105,7 +105,7 @@ export const GamePage = () => {
                 <Header>
                     {blocker.state === "blocked" ? (
                         <Alert className="bg-red-100 border-red-600">
-                            <AlertDescription>Your Changes haven't been saved.
+                            <AlertDescription>Your Changes haven&apos;t been saved.
                                 <Button className="ml-5" onClick={()=>blocker.proceed()}>Proceed</Button>
                                 <Button className="ml-5" onClick={()=>blocker.reset()}>Cancel</Button>
                             </AlertDescription>

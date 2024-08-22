@@ -19,6 +19,6 @@ public class AdminApiController {
     public void adminEndpoint(Authentication auth) {
         logger.info(((Editor)auth.getPrincipal()).getRole());
         logger.info(((Editor)auth.getPrincipal()).getAuthorities().toString()   );
-        logger.info("Admin endpoint accessed");
+        logger.info("Admin endpoint accessed by {}", ((Editor)auth.getPrincipal()).getUsername());
     }
 }

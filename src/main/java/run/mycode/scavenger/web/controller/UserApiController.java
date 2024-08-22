@@ -35,8 +35,8 @@ public class UserApiController {
     @PostMapping("/api/signin")
     public UserDto signIn(Authentication authentication) {
         Editor user = (Editor) authentication.getPrincipal();
-        logger.info("User {} signed in", user.getUsername());
 
+        logger.info("User {} signed in", user.getUsername());
         return Editor.safeDto(user);
     }
 
@@ -51,8 +51,8 @@ public class UserApiController {
 
         if (auth != null){
             Editor user = (Editor) auth.getPrincipal();
-            logger.info("User {} signed out", user.getUsername());
 
+            logger.info("User {} signed out", user.getUsername());
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
     }
@@ -97,16 +97,14 @@ public class UserApiController {
         }
 
         if (editorService.usernameExists(newUser.getUsername())) {
-            throw new UserExistsException("User already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
         if (editorService.emailExists(newUser.getEmail())) {
-            throw new UserExistsException("A user with that email address already exists");
+            throw new UserExistsException(HttpStatus.CONFLICT, "A user with that email address already exists");
         }
 
         // Create and save the new editor
         Editor newEditor = editorService.newEditor(newUser);
-
-        logger.info("New user {} signed up", newEditor.getUsername());
 
         // Return the new editor's public data
         UserDto returnDto = new UserDto();
@@ -115,6 +113,7 @@ public class UserApiController {
         returnDto.setLastName(newEditor.getLastName());
         returnDto.setEmail(newEditor.getEmail());
 
+        logger.info("New user {} signed up", newEditor.getUsername());
         return returnDto;
     }
 
@@ -135,25 +134,5 @@ public class UserApiController {
     @PostMapping("/api/userexists")
     public boolean userExists(@RequestBody UserDto user) {
         return editorService.usernameExists(user.getUsername());
-    }
-
-    /**
-     * An error flagging a user already existing
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    private static class UserExistsException extends RuntimeException {
-        public UserExistsException(String message) {
-            super(message);
-        }
-    }
-
-    /**
-     * An error flagging an invalid parameter
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    private static class InvalidParameterException extends RuntimeException {
-        public InvalidParameterException(String message) {
-            super(message);
-        }
     }
 }

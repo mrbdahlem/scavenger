@@ -35,6 +35,7 @@ public class GameApiController {
     public Iterable<GameDto> getGames(Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
+        logger.info("{} getting list of their games", editor.getUsername());
         return gameService.getGamesByOwner(editor).stream().map(Game::toDto).collect(Collectors.toList());
     }
 
@@ -63,10 +64,9 @@ public class GameApiController {
     public GameDto getGame(@PathVariable Long id, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
-        logger.info("{} getting game with id {}", editor.getUsername(), id);
-
         Game game = loadGameAndVerifyEditor(id, editor);
 
+        logger.info("{} getting game with id {}", editor.getUsername(), id);
         return gameService.getGame(id).toDto();
     }
 
@@ -86,6 +86,7 @@ public class GameApiController {
         game.setTitle(gameData.getTitle());
         game.setDescription(gameData.getDescription()); 
 
+        logger.info("{} updated game with id {}", editor.getUsername(), id);
         return gameService.updateGame(game).toDto();
     }
 
@@ -95,6 +96,7 @@ public class GameApiController {
 
         Game game = loadGameAndVerifyEditor(id, editor);
 
+        logger.info("{} getting tasks for game {}", editor.getUsername(), id);
         return game.getTasks().stream().map(Task::toDto).collect(Collectors.toList());
     }
 
@@ -106,6 +108,7 @@ public class GameApiController {
 
         Task task = gameService.createTask(game);
 
+        logger.info("{} created new task {} in game {}", editor.getUsername(), task.getId(), game.getId());
         return task.toDto();
     }
 
@@ -118,6 +121,7 @@ public class GameApiController {
         final Task task = game.getTask(taskId);
 
         if (task == null) {
+            logger.warn("Editor {} looking for task {} not found in game {}", editor.getUserName(), taskId, game.getId());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
         }
 
@@ -127,7 +131,6 @@ public class GameApiController {
         TaskDto updated = gameService.updateTask(task).toDto();
 
         logger.info("{} updated task {} in game {}", editor.getUsername(), updated.getId(), game.getId());
-
         return updated;
     }
 
@@ -142,10 +145,12 @@ public class GameApiController {
         Game game = gameService.getGame(id);
         
         if (game == null) {
+            logger.warn("Editor {} looking for game {} not found", editor.getUserName(), id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game " + id + " not found.");
         }
 
         if (!game.isEditor(editor)) {
+            logger.warn("Editor {} does not have permission to access game {}", editor.getUserName(), id);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this game.");
         }
 

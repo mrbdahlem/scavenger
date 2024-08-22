@@ -44,42 +44,63 @@ public class GameApiController {
     @PostMapping("/api/games/new")
     public GameDto newGame(@RequestBody GameDto gameData, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
-
+        
         //TODO: OWASP Filter description
-        return gameService.createGame(gameData.getTitle(), gameData.getDescription(), editor).toDto();
+        Game newGame =  gameService.createGame(gameData.getTitle(), gameData.getDescription(), editor).toDto();
+
+        logger.info ("{} created a new game with id {}", editor.getUsername(), newGame.getId());
+        return newGame;
     }
 
+    /**
+     * Get a game by id
+     * @param id the id of the game to get
+     * @return the game with the given id
+     */
     @GetMapping("/api/games/{id}")
     public GameDto getGame(@PathVariable Long id, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
         logger.info("{} getting game with id {}", editor.getUsername(), id);
 
-        Game game = gameService.getGame(id);
-
-        verifyGameOwner(id, game, editor);
+        Game game = loadGameAndVerifyEditor(id, editor);
 
         return gameService.getGame(id).toDto();
     }
 
+    /**
+     * Save a modified game
+     * @param id the id of the game to save
+     * @param gameData the modified game data
+     * @return the saved game
+     */
     @PostMapping("/api/games/{id}")
     public GameDto updateGame(@PathVariable Long id, @RequestBody GameDto gameData, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
-        Game game = gameService.getGame(id);
+        Game game = loadGameAndVerifyEditor(id, editor);
 
-        verifyGameOwner(id, game, editor);
-
+        // TODO: OWASP Filter description
         game.setTitle(gameData.getTitle());
-        game.setDescription(gameData.getDescription()); // TODO: OWASP Filter description
+        game.setDescription(gameData.getDescription()); 
 
         return gameService.updateGame(game).toDto();
     }
 
-    private static void verifyGameOwner(Long id, Game game, Editor editor) {
+    /**
+     * Load a game, making sure that it exists and that the current user is allowed to edit it
+     * @param id the id of the game to check
+     * @param editor the current user
+     * @return the game with the given id if the editor has permission to edit it
+     */
+    private Game loadGameAndVerifyEditor(Long id, Editor editor) {
+        
+        Game game = gameService.getGame(id);
+        
         if (game == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game " + id + " not found.");
         }
+        
 
         if (!game.isEditor(editor)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this game.");

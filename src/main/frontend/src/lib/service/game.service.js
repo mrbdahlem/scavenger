@@ -40,6 +40,7 @@ function saveGame(game) {
 }
 
 function createGame(game) {
+    game.id = -1;
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...authHeader() },

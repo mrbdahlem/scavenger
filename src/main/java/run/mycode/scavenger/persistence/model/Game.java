@@ -50,6 +50,32 @@ public class Game {
         return owner.getId().equals(editor.getId()) || editor.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
     }
 
+    /**
+     * Get a task by id
+     * @param id the id of the task to get
+     * @return the task with the given id or null if not found
+     */
+    public Task getTask(Long id) {
+        for (Task task : tasks) {
+            if (task.getId().equals(id)) {
+                return task;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Add a task to this game
+     * @param task the task to add
+     */
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
+    /**
+     * Convert this game object to a DTO for sending to the client
+     */
     public GameDto toDto() {
         return new GameDto(id, title, description, numPlays, numCompletions);
     }

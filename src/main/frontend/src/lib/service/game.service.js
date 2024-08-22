@@ -6,7 +6,8 @@ export const gameService = {
     saveGame,
     loadGame,
     addTask,
-    getTasks
+    getTasks,
+    saveTask
 };
 
 function gamesList() {
@@ -28,7 +29,6 @@ function loadGame(id) {
 }
 
 function saveGame(game) {
-
     if (!game.id || game.id === "new" || game.id < 0 ) {
         return createGame(game);
     }
@@ -68,6 +68,16 @@ function getTasks(gameId) {
     };
 
     return fetch(`${config.apiUrl}/games/${gameId}/tasks`, requestOptions).then(handleResponse);
+}
+
+function saveTask(gameId, task) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify(task)
+    };
+
+    return fetch(`${config.apiUrl}/games/${gameId}/tasks/${task.id}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

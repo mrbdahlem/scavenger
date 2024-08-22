@@ -109,6 +109,27 @@ public class GameApiController {
         return task.toDto();
     }
 
+    @PostMapping("/api/games/{gameId}/tasks/{taskId}")
+    public TaskDto updateTask(@PathVariable Long gameId, @PathVariable Long taskId, @RequestBody TaskDto taskData, Authentication auth) {
+        Editor editor = (Editor)auth.getPrincipal();
+
+        final Game game = loadGameAndVerifyEditor(gameId, editor);
+
+        final Task task = game.getTask(taskId);
+
+        if (task == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
+        }
+
+        task.setTitle(taskData.getName());
+        task.setDescription(taskData.getDescription());
+
+        TaskDto updated = gameService.updateTask(task).toDto();
+
+        logger.info("{} updated task {} in game {}", editor.getUsername(), updated.getId(), game.getId());
+
+        return updated;
+    }
 
     /**
      * Load a game, making sure that it exists and that the current user is allowed to edit it

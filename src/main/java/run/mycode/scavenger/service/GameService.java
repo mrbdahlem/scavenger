@@ -76,6 +76,11 @@ public class GameService {
         return comps;
     }
 
+    /**
+     * Create a new task for a game
+     * @param game the game to create the task for
+     * @return the new task
+     */
     public Task createTask(Game game) {
         final Task task = new Task();
         task.setGame(game);
@@ -85,6 +90,17 @@ public class GameService {
         final Task newTask = taskRepo.save(task);
         logger.info("Creating new task {} in game {} for {}", newTask.getId(), game.getId(), game.getOwner().getUsername());
 
+        game.addTask(newTask);
+
         return newTask;
+    }
+
+    /**
+     * Update a task
+     * @param task the task to update
+     * @return the updated task
+     */
+    public Task updateTask(Task task) {
+        return taskRepo.save(task);
     }
 }

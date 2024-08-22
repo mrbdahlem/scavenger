@@ -18,8 +18,7 @@ export const TaskList = ({gameId, tasks, onChange}) => {
         });
     };
 
-    const updateTask = (task, newName, newDesc) => {
-        const newTask = {...task, name: newName, description: newDesc};
+    const updateTask = (newTask) => {
         gameService.saveTask(gameId, newTask).then(data => {
             const updatedTaskList = taskList.map(t => {
                 if (t.id === data.id) {
@@ -37,7 +36,7 @@ export const TaskList = ({gameId, tasks, onChange}) => {
             <Button onClick={addTask}>+ Create New Task</Button>
             <div className="flex flex-col gap-4 mt-2">
                 {taskList.map((task) => (
-                    <TaskCard key={task.id} taskName={task.name} taskDescription={task.description} onChange={(name, desc) => updateTask(task, name, desc)}/>
+                    <TaskCard key={task.id} task={task} onChange={(newTask) => updateTask(newTask)}/>
                 ))}
             </div>
         </div>

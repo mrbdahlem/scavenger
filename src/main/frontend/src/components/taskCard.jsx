@@ -5,17 +5,17 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import Editor from '@/components/htmlEditor.jsx';
 
-export const TaskCard = ({taskName, taskDescription, onChange}) => {
-    const [name, setName] = useState(taskName);
-    const [description, setDescription] = useState(taskDescription);
+export const TaskCard = ({task, onChange}) => {
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
     const [editing, setEditing] = useState(false);
-    const [oldName, setOldName] = useState(taskName);
-    const [oldDescription, setOldDescription] = useState(taskDescription);
+    const [oldName, setOldName] = useState('');
+    const [oldDescription, setOldDescription] = useState('');
 
-    // useEffect(() => {
-    //     setName(taskName);
-    //     setDescription(taskDescription);
-    // }, [taskName, taskDescription]);
+    useEffect(() => {
+        setName(task.name);
+        setDescription(task.description);
+    }, [task]);
 
     function startEditing() {
         setOldName(name);
@@ -30,8 +30,9 @@ export const TaskCard = ({taskName, taskDescription, onChange}) => {
     }
 
     function saveTask() {
+        let newTask = {...task, name: name, description: description};
         if (onChange) {
-            onChange(name, description);
+            onChange(newTask);
         }
         setEditing(false)
     }

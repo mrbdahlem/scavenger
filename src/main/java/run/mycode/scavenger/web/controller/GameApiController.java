@@ -4,17 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.persistence.model.Game;
 import run.mycode.scavenger.service.EditorService;
 import run.mycode.scavenger.service.GameService;
+import run.mycode.scavenger.web.dto.GameDto;
 
-import java.io.FileNotFoundException;
+import java.util.stream.Collectors;
 
 @RestController
 @Scope("session")
@@ -32,23 +31,22 @@ public class GameApiController {
      * @return the games owned by the current user
      */
     @GetMapping("/api/games")
-    public Iterable<Game> getGames(Authentication auth) {
+    public Iterable<GameDto> getGames(Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
-        return gameService.getGamesByOwner(editor);
+        return gameService.getGamesByOwner(editor).stream().map(Game::toDto).collect(Collectors.toList());
     }
 
     /**
      * Create a new game
-     * @param title the title of the new game
-     * @param description the description of the new game
+     * @param gameData the data for the new game
      * @return the new game
      */
     @PostMapping("/api/games/new")
-    public Game newGame(String title, String description, Authentication auth) {
+    public Game newGame(@RequestBody GameDto gameData, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
-        return gameService.createGame(title, description, editor);
+        return gameService.createGame(gameData.getTitle(), gameData.getDescription(), editor);
     }
 
     @GetMapping("/api/games/{id}")

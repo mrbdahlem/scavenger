@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import run.mycode.scavenger.web.dto.GameDto;
 
 @Scope("session")
 @Component
@@ -38,5 +39,9 @@ public class Game {
     public boolean isEditor(Editor editor) {
 
         return owner.getId().equals(editor.getId()) || editor.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+    }
+
+    public GameDto toDto() {
+        return new GameDto(id, title, description, numPlays, numCompletions);
     }
 }

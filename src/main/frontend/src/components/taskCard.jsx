@@ -53,7 +53,7 @@ export const TaskCard = ({taskName, taskDescription, onChange}) => {
             <CardContent className="px-3 py-0">       
                 { ( !editing &&          
                     <CardDescription className="truncate" dangerouslySetInnerHTML={{__html: description}} /> ) 
-                    || <Editor value={description} onChange={setDescription} 
+                    || <Editor content={description} onChange={setDescription} 
                         placeholder="Enter the description of the task..." /> }
             </CardContent>
             

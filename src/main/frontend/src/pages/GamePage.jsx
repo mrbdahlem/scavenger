@@ -81,7 +81,6 @@ export const GamePage = () => {
         } else {
             // fetch game data
             gameService.loadGame(gameId).then(data => {
-                console.log(data);
                 setGameId(data.id || -1);
                 setTitle(data.title || "");
                 setDescription(data.description || "");
@@ -90,7 +89,6 @@ export const GamePage = () => {
             });
             gameService.getTasks(gameId).then(data => {
                 setTasks(data);
-                console.log(data);
             });
         }},[gameId]);
 

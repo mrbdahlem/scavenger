@@ -162,6 +162,25 @@ public class GameApiController {
         return updated;
     }
 
+    @DeleteMapping
+    public String deleteTask(@PathVariable Long gameId, @PathVariable Long taskId, Authentication auth) {
+        Editor editor = (Editor)auth.getPrincipal();
+
+        final Game game = loadGameAndVerifyEditor(gameId, editor);
+
+        final Task task = game.getTask(taskId);
+
+        if (task == null) {
+            logger.warn("Editor {} looking to delete task {}, not found in game {}", editor.getUsername(), taskId, game.getId());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
+        }
+
+        gameService.deleteTask(taskId);
+
+        logger.info("{} deleted task {} in game {}", editor.getUsername(), taskId, game.getId());
+        return "Task deleted";
+    }
+
     /**
      * Load a game, making sure that it exists and that the current user is allowed to edit it
      * @param id the id of the game to check

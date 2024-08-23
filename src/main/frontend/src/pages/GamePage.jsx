@@ -121,10 +121,10 @@ export const GamePage = () => {
                             </AlertDescription>
                         </Alert>
                     )) ||
-                        <>
+                        <div className="flex flex-row justify-between">
                             <h1 className="text-3xl">{title}</h1>
                             <Button onClick={saveGame} variant={unsavedChanges ? "default" : "secondary"}>Save</Button>
-                        </>
+                        </div>
                     }
                 </Header>
                 <div className="mt-[60px]">

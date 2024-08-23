@@ -6,15 +6,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.context.annotation.Scope;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import run.mycode.scavenger.web.dto.GameDto;
-import run.mycode.scavenger.web.dto.TaskDto;
-
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-
 
 @Component
 @Entity
@@ -35,6 +30,7 @@ public class Game {
     private Editor owner;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Task> tasks;
 
     private int numPlays;

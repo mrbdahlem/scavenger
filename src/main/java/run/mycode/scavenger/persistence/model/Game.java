@@ -1,6 +1,7 @@
 package run.mycode.scavenger.persistence.model;
 
 import java.util.List;
+import java.util.ListIterator;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -74,5 +75,22 @@ public class Game {
      */
     public GameDto toDto() {
         return new GameDto(id, title, description, numPlays, numCompletions);
+    }
+
+    /**
+     * Remove a task from this game
+     * @param task the task to remove
+     */
+    public void removeTask(Task task) {
+        ListIterator<Task> iter = tasks.listIterator();
+
+        while (iter.hasNext()) {
+            Task t = iter.next();
+
+            if (t.getId().equals(task.getId())) {
+                iter.remove();
+                return;
+            }
+        }
     }
 }

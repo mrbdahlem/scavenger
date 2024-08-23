@@ -162,7 +162,7 @@ public class GameApiController {
         return updated;
     }
 
-    @DeleteMapping
+    @DeleteMapping("/api/games/{gameId}/tasks/{taskId}")
     public String deleteTask(@PathVariable Long gameId, @PathVariable Long taskId, Authentication auth) {
         Editor editor = (Editor)auth.getPrincipal();
 
@@ -178,7 +178,7 @@ public class GameApiController {
         gameService.deleteTask(taskId);
 
         logger.info("{} deleted task {} in game {}", editor.getUsername(), taskId, game.getId());
-        return "Task deleted";
+        return "\"Task deleted\"";
     }
 
     /**

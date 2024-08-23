@@ -112,7 +112,7 @@ export const GamePage = () => {
         loaded &&
         <>
             <div className="w-[480px] md:w-[600px] lg:w-[900px] mx-auto">
-                <Header>
+                <Header className="flex flex-row justify-between mx-5 w-full">
                     {(blocker.state === "blocked" && (
                         <Alert className="bg-red-100 border-red-600">
                             <AlertDescription>Your Changes haven&apos;t been saved.
@@ -121,10 +121,10 @@ export const GamePage = () => {
                             </AlertDescription>
                         </Alert>
                     )) ||
-                        <div className="flex flex-row justify-between">
+                        <>
                             <h1 className="text-3xl">{title}</h1>
                             <Button onClick={saveGame} variant={unsavedChanges ? "default" : "secondary"}>Save</Button>
-                        </div>
+                        </>
                     }
                 </Header>
                 <div className="mt-[60px]">

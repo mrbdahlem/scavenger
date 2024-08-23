@@ -31,12 +31,21 @@ export const TaskList = ({gameId, tasks, onChange}) => {
         });
     }
 
+    const deleteTask = (taskId) => {
+        gameService.deleteTask(gameId, taskId).then(() => {
+            const updatedTaskList = taskList.filter(t => t.id !== taskId);
+            setTaskList(updatedTaskList);
+            onChange(updatedTaskList);
+        });
+    }
+
     return (
         <div className="mt-5">
             <Button onClick={addTask}>+ Create New Task</Button>
             <div className="flex flex-col gap-4 mt-2">
                 {taskList.map((task) => (
-                    <TaskCard key={task.id} task={task} onChange={(newTask) => updateTask(newTask)}/>
+                    <TaskCard key={task.id} task={task} onChange={(newTask) => updateTask(newTask)}
+                        onDelete={()=> deleteTask(task.id)} />
                 ))}
             </div>
         </div>

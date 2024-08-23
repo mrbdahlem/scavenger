@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import Editor from '@/components/htmlEditor.jsx';
 
-export const TaskCard = ({task, onChange}) => {
+export const TaskCard = ({task, onChange, onDelete}) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [editing, setEditing] = useState(false);
@@ -37,9 +37,18 @@ export const TaskCard = ({task, onChange}) => {
         setEditing(false)
     }
 
+    function deleteTask() {
+        if (confirm("Do you really want to delete this task?")) {
+            // console.log("delete " + task.id);
+            if (onDelete) {
+                onDelete(task.id);
+            }
+        }
+    }
+
     return (
         <Card className="mt-1">
-            <CardHeader className="flex flex-row items-center justify-between p-3">
+            <CardHeader className="flex flex-row items-center justify-between  p-3">
                 <CardTitle className="text-sm font-bold w-full">
                     {(!editing && name)  ||
                         <>
@@ -58,13 +67,19 @@ export const TaskCard = ({task, onChange}) => {
                         placeholder="Enter the description of the task..." /> }
             </CardContent>
             
-            <CardFooter className="p-3 flex flex-row justify-end items-center">
+            <CardFooter className="p-3 flex flex-row-reverse justify-between items-center">
                 { (!editing && <Button variant="ghost" onClick={()=>startEditing()}>✏</Button>)
                     ||
                         <>
-                            <Button variant="ghost" onClick={saveTask}>✔</Button>
-                            <Button variant="ghost" onClick={cancelEditing}>❌</Button>
-                        </>    }
+                            <div>
+                                <Button variant="ghost" onClick={saveTask}>✔</Button>
+                                <Button variant="ghost" onClick={cancelEditing}>❌</Button>
+                            </div>
+                            { onDelete &&
+                                <Button variant="destructive" onClick={deleteTask}>🗑️</Button>
+                            }
+                        </>
+                }
             </CardFooter>
         </Card>
 

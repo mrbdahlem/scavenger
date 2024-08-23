@@ -103,4 +103,21 @@ public class GameService {
     public Task updateTask(Task task) {
         return taskRepo.save(task);
     }
+
+    /**
+     * Delete a task
+     * @param id the id of the task to delete
+     */
+    public void deleteTask(Long id) {
+        Task task = taskRepo.findById(id).orElse(null);
+
+        if (task != null) {
+            Game game = task.getGame();
+            game.removeTask(task);
+        }
+
+        logger.info("Deleting task {}", id);
+        taskRepo.deleteById(id);
+    }
+
 }

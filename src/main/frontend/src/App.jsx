@@ -1,35 +1,53 @@
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Routes, Route , Navigate} from "react-router-dom";
-import { LoginPage } from "./pages/LoginPage.jsx";
-import { HomePage } from "./pages/HomePage.jsx";
-import { GamesPage } from "./pages/GamesPage.jsx";
+import {lazy, Suspense} from "react";
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route , Navigate} from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {AuthProvider} from "./hooks/useAuth.jsx";
-import {SignUpPage} from "@/pages/SignUpPage.jsx";
-import {AdminPage} from "@/pages/Admin.jsx";
-import {GamePage} from "@/pages/GamePage.jsx";
+import {TagPage} from "@/pages/TagPage.jsx";
+import { HomePage } from "@/pages/HomePage.jsx";
+
+const SignUpPage = lazy(() => import("@/pages/SignUpPage.jsx"));
+const AdminPage = lazy(() => import("@/pages/Admin.jsx"));
+const GamesPage = lazy(() => import("@/pages/GamesPage.jsx"));
+const GamePage = lazy(() => import("@/pages/GamePage.jsx"));
+const LoginPage = lazy(() => import("@/pages/LoginPage.jsx"));
+
 
 function App() {
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
+                <Route path="/login" element={
+                    <Suspense>
+                        <LoginPage />
+                    </Suspense>} />
+                <Route path="/signup" element={
+                    <Suspense>
+                        <SignUpPage />
+                    </Suspense>
+                } />
                 <Route path="/games" element={
                     <ProtectedRoute redirect="/games">
-                        <GamesPage />
+                        <Suspense>
+                            <GamesPage />
+                        </Suspense>
                     </ProtectedRoute>
                 } />
                 <Route path="/admin" element={
                     <ProtectedRoute redirect="/admin">
-                        <AdminPage />
+                        <Suspense>
+                            <AdminPage />
+                        </Suspense>
                     </ProtectedRoute>
                 } />
                 <Route path="/game" element={
                     <ProtectedRoute redirect="/game">
-                        <GamePage />
+                        <Suspense>
+                            <GamePage />
+                        </Suspense>
                     </ProtectedRoute>
                 } />
+                <Route path="/tag/:id" element={<TagPage />} />
                 <Route path="*" element={
                     <Navigate to="/" />
                 } />
@@ -38,7 +56,7 @@ function App() {
 
     return (
         <AuthProvider>
-            <RouterProvider router={router} />
+                <RouterProvider router={router} />
         </AuthProvider>
     )
 }

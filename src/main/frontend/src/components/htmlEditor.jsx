@@ -19,6 +19,7 @@ export const Editor = ({ content, placeholder, onChange, ref }) => {
             height: -1,
             allowResizeX: false,
             allowResizeY: true,
+            tabIndex: 0,
 
         }},
         [placeholder]
@@ -38,8 +39,8 @@ export const Editor = ({ content, placeholder, onChange, ref }) => {
             config={config}
 
             tabIndex={-1} // tabIndex of textarea
-            // onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-            onChange={handleChanges}
+            onBlur={handleChanges} // preferred to use only this option to update the content for performance reasons
+            // onChange={handleChanges}
         />
     );
 };

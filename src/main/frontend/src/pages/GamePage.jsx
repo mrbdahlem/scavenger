@@ -112,19 +112,21 @@ export const GamePage = () => {
         loaded &&
         <>
             <div className="w-[480px] md:w-[600px] lg:w-[900px] mx-auto">
-                <Header>
-                    {blocker.state === "blocked" ? (
+                <Header className="flex flex-row justify-between mx-5 w-full">
+                    {(blocker.state === "blocked" && (
                         <Alert className="bg-red-100 border-red-600">
                             <AlertDescription>Your Changes haven&apos;t been saved.
                                 <Button className="ml-5" onClick={()=>blocker.proceed()}>Proceed</Button>
                                 <Button className="ml-5" onClick={()=>blocker.reset()}>Cancel</Button>
                             </AlertDescription>
                         </Alert>
-                        )
-                    :
+                    )) ||
                         <>
                             <h1 className="text-3xl">{title}</h1>
-                            <Button onClick={saveGame} variant={unsavedChanges ? "default" : "secondary"}>Save</Button>
+                            <div>
+                                <Button onClick={saveGame} variant={unsavedChanges ? "default" : "secondary"}>Save</Button>
+                                <Button variant="ghost" className="font-extrabold">&#8942;</Button>
+                            </div>
                         </>
                     }
                 </Header>
@@ -147,3 +149,5 @@ export const GamePage = () => {
     </>
     )
 }
+
+export default GamePage;

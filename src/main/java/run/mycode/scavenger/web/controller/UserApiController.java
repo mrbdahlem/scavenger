@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import run.mycode.scavenger.persistence.model.Editor;
 import run.mycode.scavenger.service.EditorService;
 import run.mycode.scavenger.web.dto.UserDto;
@@ -65,42 +66,42 @@ public class UserApiController {
     @PostMapping("/api/signup")
     public UserDto signUp(@RequestBody UserDto newUser) {
         if (newUser.getUsername().length() < 4) {
-            throw new InvalidParameterException("Username must be at least 4 characters long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username must be at least 4 characters long");
         }
 
         if (newUser.getPassword().length() < 8) {
-            throw new InvalidParameterException("Password must be at least 8 characters long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be at least 8 characters long");
         }
 
         if (newUser.getFirstName().isEmpty()) {
-            throw new InvalidParameterException("First name must be at least 1 character long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "First name must be at least 1 character long");
         }
 
         if (newUser.getLastName().isEmpty()) {
-            throw new InvalidParameterException("Last name must be at least 1 character long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Last name must be at least 1 character long");
         }
 
         if (newUser.getEmail().isEmpty()) {
-            throw new InvalidParameterException("Email must be at least 1 character long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email must be at least 1 character long");
         }
 
         if (!newUser.getEmail().contains("@")) {
-            throw new InvalidParameterException("Email must contain an @ symbol");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email must contain an @ symbol");
         }
 
         if (!newUser.getEmail().contains(".")) {
-            throw new InvalidParameterException("Email must contain a . symbol");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email must contain a . symbol");
         }
 
         if (newUser.getEmail().length() < 5) {
-            throw new InvalidParameterException("Email must be at least 5 characters long");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email must be at least 5 characters long");
         }
 
         if (editorService.usernameExists(newUser.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
         if (editorService.emailExists(newUser.getEmail())) {
-            throw new UserExistsException(HttpStatus.CONFLICT, "A user with that email address already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "A user with that email address already exists");
         }
 
         // Create and save the new editor

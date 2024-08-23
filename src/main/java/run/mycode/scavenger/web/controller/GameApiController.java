@@ -67,7 +67,7 @@ public class GameApiController {
         Game game = loadGameAndVerifyEditor(id, editor);
 
         logger.info("{} getting game with id {}", editor.getUsername(), id);
-        return gameService.getGame(id).toDto();
+        return game.toDto();
     }
 
     /**
@@ -121,7 +121,7 @@ public class GameApiController {
         final Task task = game.getTask(taskId);
 
         if (task == null) {
-            logger.warn("Editor {} looking for task {} not found in game {}", editor.getUserName(), taskId, game.getId());
+            logger.warn("Editor {} looking for task {} not found in game {}", editor.getUsername(), taskId, game.getId());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
         }
 
@@ -145,12 +145,12 @@ public class GameApiController {
         Game game = gameService.getGame(id);
         
         if (game == null) {
-            logger.warn("Editor {} looking for game {} not found", editor.getUserName(), id);
+            logger.warn("Editor {} looking for game {} not found", editor.getUsername(), id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game " + id + " not found.");
         }
 
         if (!game.isEditor(editor)) {
-            logger.warn("Editor {} does not have permission to access game {}", editor.getUserName(), id);
+            logger.warn("Editor {} does not have permission to access game {}", editor.getUsername(), id);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this game.");
         }
 

@@ -17,3 +17,5 @@ export const GamesPage = () => {
         </>
     )
 }
+
+export default GamesPage;

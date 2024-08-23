@@ -14,3 +14,5 @@ export const TagPage = () => {
         </div>
     )
 }
+
+export default TagPage;

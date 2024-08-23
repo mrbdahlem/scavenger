@@ -88,3 +88,5 @@ export const SignUpPage = () => {
         </Card>
     );
 }
+
+export default SignUpPage;

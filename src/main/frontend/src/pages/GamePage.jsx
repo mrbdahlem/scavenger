@@ -123,7 +123,10 @@ export const GamePage = () => {
                     )) ||
                         <>
                             <h1 className="text-3xl">{title}</h1>
-                            <Button onClick={saveGame} variant={unsavedChanges ? "default" : "secondary"}>Save</Button>
+                            <div>
+                                <Button onClick={saveGame} variant={unsavedChanges ? "default" : "secondary"}>Save</Button>
+                                <Button variant="ghost" className="font-extrabold">&#8942;</Button>
+                            </div>
                         </>
                     }
                 </Header>

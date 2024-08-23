@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Routes, Route , Navigate} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route , Navigate} from "react-router-dom";
 import { LoginPage } from "./pages/LoginPage.jsx";
 import { HomePage } from "./pages/HomePage.jsx";
 import { GamesPage } from "./pages/GamesPage.jsx";
@@ -7,6 +7,7 @@ import {AuthProvider} from "./hooks/useAuth.jsx";
 import {SignUpPage} from "@/pages/SignUpPage.jsx";
 import {AdminPage} from "@/pages/Admin.jsx";
 import {GamePage} from "@/pages/GamePage.jsx";
+import {TagPage} from "@/pages/TagPage.jsx";
 
 function App() {
     const router = createBrowserRouter(
@@ -30,6 +31,7 @@ function App() {
                         <GamePage />
                     </ProtectedRoute>
                 } />
+                <Route path="/tag/:id" element={<TagPage />} />
                 <Route path="*" element={
                     <Navigate to="/" />
                 } />

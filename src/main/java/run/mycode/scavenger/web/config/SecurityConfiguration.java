@@ -22,6 +22,7 @@ public class SecurityConfiguration {
 
                 // Allow all requests to / and /assets and to the signup and userexists endpoints
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/*", "/assets/**", "/api/signup", "/api/userexists", "/tag/*").permitAll()
+                        .requestMatchers("/api/tag/public/**").permitAll()
                         // Allow all requests to /api/** if the user is authenticated
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/*").authenticated()

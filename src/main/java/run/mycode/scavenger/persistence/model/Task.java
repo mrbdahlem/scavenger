@@ -1,6 +1,7 @@
 package run.mycode.scavenger.persistence.model;
 
-import jakarta.validation.constraints.NotNull;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,6 +32,28 @@ public class Task {
     @ManyToOne(fetch= FetchType.LAZY, optional = false)
     @JoinColumn(name = "game_id")
     private Game game;
+
+    
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    private List<Trigger> triggers;
+
+    public void addTrigger(Trigger trigger) {
+        if (triggers == null) {
+            triggers = List.of(trigger);
+        }
+        triggers.add(trigger);
+        trigger.setTask(this);
+        trigger.setGame(this.game);
+    }
+
+    public void removeTag(Trigger trigger) {
+        if (triggers == null) {
+            return;
+        }
+        triggers.remove(trigger);
+        trigger.setTask(null);
+        trigger.setGame(null);
+    }
 
     public TaskDto toDto() {
         return new TaskDto(id, title, description, game.getId());

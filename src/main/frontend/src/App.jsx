@@ -47,7 +47,7 @@ function App() {
                         </Suspense>
                     </ProtectedRoute>
                 } />
-                <Route path="/tag/:id" element={<TagPage />} />
+                <Route path="/tag/:hash" element={<TagPage />} />
                 <Route path="*" element={
                     <Navigate to="/" />
                 } />

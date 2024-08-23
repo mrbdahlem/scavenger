@@ -10,6 +10,7 @@ export const gameService = {
     saveTask,
     deleteTask
 };
+export default gameService;
 
 function gamesList() {
     const requestOptions = {

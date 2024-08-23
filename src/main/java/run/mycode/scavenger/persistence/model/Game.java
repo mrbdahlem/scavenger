@@ -3,6 +3,8 @@ package run.mycode.scavenger.persistence.model;
 import java.util.List;
 import java.util.ListIterator;
 
+import run.mycode.scavenger.persistence.model.Tag;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import run.mycode.scavenger.web.dto.GameDto;
+
 
 @Component
 @Entity
@@ -37,13 +40,18 @@ public class Game {
     private int numPlays;
     private int numCompletions;
 
+    @OneToOne(mappedBy = "game", fetch = FetchType.LAZY)
+    private Tag startTag;
+
+    @OneToOne(mappedBy = "game", fetch = FetchType.LAZY)
+    private Tag endTag;
+
     /**
      * Check if the given editor is the owner of this game or the game has been shared with them
      * @param editor the editor to check
      * @return true if the editor can edit this game
      */
     public boolean isEditor(Editor editor) {
-
         return owner.getId().equals(editor.getId()) || editor.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
     }
 
@@ -53,6 +61,10 @@ public class Game {
      * @return the task with the given id or null if not found
      */
     public Task getTask(Long id) {
+        if (tasks == null) {
+            return null;
+        }
+
         for (Task task : tasks) {
             if (task.getId().equals(id)) {
                 return task;
@@ -67,21 +79,22 @@ public class Game {
      * @param task the task to add
      */
     public void addTask(Task task) {
+        if (tasks == null) {
+            tasks = List.of(task);
+            return;
+        }
+
         tasks.add(task);
     }
-
-    /**
-     * Convert this game object to a DTO for sending to the client
-     */
-    public GameDto toDto() {
-        return new GameDto(id, title, description, numPlays, numCompletions);
-    }
-
     /**
      * Remove a task from this game
      * @param task the task to remove
      */
     public void removeTask(Task task) {
+        if (tasks == null) {
+            return;
+        }
+
         ListIterator<Task> iter = tasks.listIterator();
 
         while (iter.hasNext()) {
@@ -93,4 +106,36 @@ public class Game {
             }
         }
     }
+
+    public void setStartTag(Tag tag) {
+        startTag = tag;
+        tag.setGame(this);
+    }
+
+    public void setEndTag(Tag tag) {
+        endTag = tag;
+        tag.setGame(this);
+    }
+
+    public void removeStartTag() {
+        if (startTag != null) {
+            startTag.setGame(null);
+        }
+        startTag = null;
+    }
+
+    public void removeEndTag() {
+        if (endTag != null) {
+            endTag.setGame(null);  
+        }
+        endTag = null;
+    }
+
+    /**
+     * Convert this game object to a DTO for sending to the client
+     */
+    public GameDto toDto() {
+        return new GameDto(id, title, description, numPlays, numCompletions);
+    }
+
 }

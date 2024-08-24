@@ -96,6 +96,15 @@ public class GameService {
     }
 
     /**
+     * Get a task
+     * @param id the id of the task to get
+     * @return the task with the given id
+     */
+    public Task getTask(Long id) {
+        return taskRepo.findById(id).orElse(null);
+    }
+
+    /**
      * Update a task
      * @param task the task to update
      * @return the updated task

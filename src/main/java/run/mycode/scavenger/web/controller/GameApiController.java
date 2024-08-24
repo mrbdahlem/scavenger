@@ -111,6 +111,23 @@ public class GameApiController {
         return game.getTasks().stream().map(Task::toDto).collect(Collectors.toList());
     }
 
+    @GetMapping("/api/tasks/{taskId}")
+    public TaskDto getTask(@PathVariable Long taskId, Authentication auth) {
+        Editor editor = (Editor)auth.getPrincipal();
+
+        Task task = gameService.getTask(taskId);
+
+        if (task == null) {
+            logger.warn("Editor {} looking for task {}, not found in game {}", editor.getUsername(), taskId, task.getGame().getId());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
+        }
+
+        verifyEditor(task.getGame(), editor);
+
+        logger.info("{} getting task {} in game {}", editor.getUsername(), taskId, task.getGame().getId());
+        return task.toDto();
+    }
+
     /**
      * Create a new task for a game
      * @param id the id of the game to create the task for
@@ -146,7 +163,7 @@ public class GameApiController {
         final Task task = game.getTask(taskId);
 
         if (task == null) {
-            logger.warn("Editor {} looking for task {}, not found in game {}", editor.getUsername(), taskId, game.getId());
+            logger.warn("Editor {} updating task {}, not found in game {}", editor.getUsername(), taskId, game.getId());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
         }
 
@@ -196,11 +213,20 @@ public class GameApiController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game " + id + " not found.");
         }
 
-        if (!game.isEditor(editor)) {
-            logger.warn("Editor {} does not have permission to access game {}", editor.getUsername(), id);
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this game.");
-        }
+        verifyEditor(game, editor);
 
         return game;
+    }
+
+    /**
+     * Verify that an editor has permission to edit a game
+     * @param game the game to check
+     * @param editor the editor to check
+     */
+    private void verifyEditor(Game game, Editor editor) {
+        if (!game.isEditor(editor)) {
+            logger.warn("Editor {} does not have permission to access game {}", editor.getUsername(), game.getId());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this game.");
+        }
     }
 }

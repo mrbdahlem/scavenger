@@ -7,6 +7,7 @@ export const gameService = {
     loadGame,
     addTask,
     getTasks,
+    loadTask,
     saveTask,
     deleteTask
 };
@@ -70,6 +71,15 @@ function getTasks(gameId) {
     };
 
     return fetch(`${config.apiUrl}/games/${gameId}/tasks`, requestOptions).then(handleResponse);
+}
+
+function loadTask(taskId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${config.apiUrl}/tasks/${taskId}`, requestOptions).then(handleResponse);
 }
 
 function saveTask(gameId, task) {

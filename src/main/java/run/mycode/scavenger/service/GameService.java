@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.mycode.scavenger.persistence.dao.GameRepository;
 import run.mycode.scavenger.persistence.dao.TaskRepository;
-import run.mycode.scavenger.persistence.model.Editor;
-import run.mycode.scavenger.persistence.model.Game;
-import run.mycode.scavenger.persistence.model.Task;
+import run.mycode.scavenger.persistence.model.*;
 
 @Service
 @Transactional
@@ -26,12 +24,20 @@ public class GameService {
     }
 
     public Game createGame(String title, String description, Editor owner) {
-        final Game game = new Game();
+        Game game = new Game();
         game.setTitle(title);
         game.setDescription(description);
         game.setOwner(owner);
         game.setNumPlays(0);
         game.setNumCompletions(0);
+
+        final Task startGame = new StartGameTask();
+        startGame.setGame(game);
+        game.addTask(startGame);
+
+        final Task endGame = new EndGameTask();
+        endGame.setGame(game);
+        game.addTask(endGame);
 
         return gameRepo.save(game);
     }

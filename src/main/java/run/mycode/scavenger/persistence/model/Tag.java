@@ -38,10 +38,9 @@ public class Tag extends Trigger implements Serializable {
         if (o == this) {
             return true;
         }
-        if (!(o instanceof Tag)) {
+        if (!(o instanceof Tag other)) {
             return false;
         }
-        Tag other = (Tag) o;
         return other.getHash().equals(this.getHash());
     }
 

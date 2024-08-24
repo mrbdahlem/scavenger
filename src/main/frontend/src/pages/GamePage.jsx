@@ -74,7 +74,7 @@ export const GamePage = () => {
 
     // Fetch game data or clear form when creating a new game
     useEffect (() => {
-        if (gameId === "new") {
+        if (gameId === -1 || gameId === "-1") {
             setTitle("");
             setDescription("");
             setLoaded(true)

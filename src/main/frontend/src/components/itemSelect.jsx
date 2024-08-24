@@ -5,15 +5,16 @@ import {Button} from "@/components/ui/button";
 import {Drawer, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer";
 import {useMediaQuery} from "@/hooks/use-media-query";
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command";
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 
-const GameSelect = ({onChange, games}) => {
+const ItemSelect = ({onChange, items: items, setTitle}) => {
 
     const [open, setOpen] = useState(false);
-    const [game, setGame] = useState(null);
+    const [item, setItem] = useState(null);
 
-    function handleGameChange(game) {
-        setGame(game);
-        onChange(game);
+    function handleItemChange(item) {
+        setItem(item);
+        onChange(item);
     }
 
     const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -22,11 +23,11 @@ const GameSelect = ({onChange, games}) => {
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="outline" className="w-[150px] justify-start">
-                        {game ? <>{game.title}</> : <>+ Set game</>}
+                        {item ? <>{item.title || item.name}</> : <>{setTitle}</>}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[200px] p-0" align="start">
-                    <GameList setOpen={setOpen} setGame={setGame} games={games}/>
+                    <ItemList setOpen={setOpen} setItem={handleItemChange} items={items}/>
                 </PopoverContent>
             </Popover>
         )
@@ -34,41 +35,43 @@ const GameSelect = ({onChange, games}) => {
             <Drawer open={open} onOpenChange={setOpen}>
                 <DrawerTrigger asChild>
                     <Button variant="outline" className="w-[150px] justify-start">
-                        {game ? <>{game.title}</> : <>+ Set game</>}
+                        {item ? <>{item.title || item.name}</> : <>{setTitle}</>}
                     </Button>
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerTitle>
-                        <DrawerDescription>Select a game</DrawerDescription>
+                        <VisuallyHidden.Root>
+                            <DrawerDescription>Choose one</DrawerDescription>
+                        </VisuallyHidden.Root>
                     </DrawerTitle>
                     <div className="mt-4 border-t">
-                        <GameList setOpen={setOpen} setGame={handleGameChange} games={games}/>
+                        <ItemList setOpen={setOpen} setItem={handleItemChange} items={items}/>
                     </div>
                 </DrawerContent>
             </Drawer>
         )
 }
 
-export default GameSelect;
+export default ItemSelect;
 
-function GameList({setOpen, setGame, games}) {
+function ItemList({setOpen, setItem: setItem, items: items}) {
     return (
         <Command>
-            <CommandInput placeholder="Filter games..." />
+            <CommandInput placeholder="Filter..." />
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup>
-                    {games.map((game) => (
+                    {items.map((item) => (
                         <CommandItem
-                            key={game.id}
-                            value={""+game.id}
+                            key={item.id}
+                            value={""+item.id}
                             onSelect={(id) => {
                                 id = parseInt(id)
-                                setGame( games.find((game) => game.id === id) || null )
+                                setItem( items.find((item) => item.id === id) || null )
                                 setOpen(false)
                             }}
                         >
-                            {game.title}
+                            {item.title || item.name}
                         </CommandItem>
                     ))}
                 </CommandGroup>

@@ -17,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 @Getter
 @Setter
 @ToString
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Task {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "game_id_sequence")
@@ -46,7 +47,7 @@ public class Task {
         trigger.setGame(this.game);
     }
 
-    public void removeTag(Trigger trigger) {
+    public void removeTrigger(Trigger trigger) {
         if (triggers == null) {
             return;
         }
@@ -58,4 +59,5 @@ public class Task {
     public TaskDto toDto() {
         return new TaskDto(id, title, description, game.getId());
     }
+
 }

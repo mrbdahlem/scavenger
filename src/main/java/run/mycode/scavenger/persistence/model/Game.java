@@ -1,17 +1,18 @@
 package run.mycode.scavenger.persistence.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-
-import run.mycode.scavenger.persistence.model.Tag;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Cascade;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 import run.mycode.scavenger.web.dto.GameDto;
 
 
@@ -39,12 +40,6 @@ public class Game {
 
     private int numPlays;
     private int numCompletions;
-
-    @OneToOne(mappedBy = "game", fetch = FetchType.LAZY)
-    private Tag startTag;
-
-    @OneToOne(mappedBy = "game", fetch = FetchType.LAZY)
-    private Tag endTag;
 
     /**
      * Check if the given editor is the owner of this game or the game has been shared with them
@@ -80,7 +75,8 @@ public class Game {
      */
     public void addTask(Task task) {
         if (tasks == null) {
-            tasks = List.of(task);
+            tasks = new ArrayList<>();
+            tasks.add(task);
             return;
         }
 
@@ -95,6 +91,10 @@ public class Game {
             return;
         }
 
+        if (task instanceof StartGameTask || task instanceof EndGameTask) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot remove start or end game tasks");
+        }
+
         ListIterator<Task> iter = tasks.listIterator();
 
         while (iter.hasNext()) {
@@ -105,30 +105,6 @@ public class Game {
                 return;
             }
         }
-    }
-
-    public void setStartTag(Tag tag) {
-        startTag = tag;
-        tag.setGame(this);
-    }
-
-    public void setEndTag(Tag tag) {
-        endTag = tag;
-        tag.setGame(this);
-    }
-
-    public void removeStartTag() {
-        if (startTag != null) {
-            startTag.setGame(null);
-        }
-        startTag = null;
-    }
-
-    public void removeEndTag() {
-        if (endTag != null) {
-            endTag.setGame(null);  
-        }
-        endTag = null;
     }
 
     /**

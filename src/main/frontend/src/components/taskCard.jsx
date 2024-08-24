@@ -15,6 +15,7 @@ export const TaskCard = ({task, onChange, onDelete}) => {
     useEffect(() => {
         setName(task.name);
         setDescription(task.description);
+        console.log(task);
     }, [task]);
 
     function startEditing() {
@@ -50,20 +51,26 @@ export const TaskCard = ({task, onChange, onDelete}) => {
         <Card className="mt-1">
             <CardHeader className="flex flex-row items-center justify-between  p-3">
                 <CardTitle className="text-sm font-bold w-full">
-                    {(!editing && name)  ||
-                        <>
-                            <Input type="text" value={name} onChange={(e) => setName(e.target.value)} /> 
-                            <p className="font-light italic text-xs">(participants will not see the task name until they complete the task)</p>
-                        </>
-                    }
-
+                    <>
+                        {task.start && <>▶&nbsp;</>}{task.end && <>🏁&nbsp;</>}
+                        {(!editing && name)
+                            || // editing
+                            <>
+                                <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                                <p className="font-light italic text-xs">(participants will not see the task name until they complete the task)</p>
+                            </>
+                        }
+                    </>
                 </CardTitle>
 
             </CardHeader>
             <CardContent className="px-3 py-0">       
                 { ( !editing &&          
                     <CardDescription className="truncate" dangerouslySetInnerHTML={{__html: description}} /> ) 
-                    || <Editor content={description} onChange={setDescription} 
+
+                    || // editing
+
+                    <Editor content={description} onChange={setDescription}
                         placeholder="Enter the description of the task..." /> }
             </CardContent>
             
@@ -75,7 +82,7 @@ export const TaskCard = ({task, onChange, onDelete}) => {
                                 <Button variant="ghost" onClick={saveTask}>✔</Button>
                                 <Button variant="ghost" onClick={cancelEditing}>❌</Button>
                             </div>
-                            { onDelete &&
+                            { onDelete && !task.start && !task.end &&
                                 <Button variant="destructive" onClick={deleteTask}>🗑️</Button>
                             }
                         </>

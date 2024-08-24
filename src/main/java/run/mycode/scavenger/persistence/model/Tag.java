@@ -20,6 +20,7 @@ import run.mycode.scavenger.web.dto.TagDto;
 @ToString
 public class Tag extends Trigger implements Serializable {
 
+    @Column(unique=true)
     UUID hash;
 
     public Tag() {
@@ -49,8 +50,8 @@ public class Tag extends Trigger implements Serializable {
     }
 
     public TagDto toDto() {
-        Long gameId = this.getGame() == null ? null : this.getGame().getId();
-        Long taskId = this.getTask() == null ? null : this.getTask().getId();
-        return new TagDto(this.hash, gameId, taskId, this.getTriggerType().toString());
+        TagDto dto = super.toDto();
+        dto.setHash(this.getHash());
+        return dto;
     }
 }

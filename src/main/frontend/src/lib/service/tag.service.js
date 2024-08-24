@@ -2,7 +2,8 @@ import config from '../../../config.js';
 import { authHeader } from '../utils.ts';
 
 export const tagService = {
-    loadTag
+    loadTag,
+    saveTag
 };
 
 export default tagService;
@@ -13,6 +14,16 @@ function loadTag(hash) {
     };
 
     return fetch(`${config.apiUrl}/tag/public/${hash}`, requestOptions).then(handleResponse);
+}
+
+function saveTag(tag) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify(tag)
+    };
+    console.log("saving", tag)
+    return fetch(`${config.apiUrl}/tag/${tag.hash}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

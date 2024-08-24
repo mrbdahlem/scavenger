@@ -4,6 +4,7 @@ import {Card, CardTitle, CardHeader, CardFooter, CardContent, CardDescription} f
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import Editor from '@/components/htmlEditor.jsx';
+import gameService from "@/lib/service/game.service";
 
 export const TaskCard = ({task, onChange, onDelete}) => {
     const [name, setName] = useState('');
@@ -11,11 +12,14 @@ export const TaskCard = ({task, onChange, onDelete}) => {
     const [editing, setEditing] = useState(false);
     const [oldName, setOldName] = useState('');
     const [oldDescription, setOldDescription] = useState('');
+    const [tags, setTags] = useState([]);
 
     useEffect(() => {
         setName(task.name);
         setDescription(task.description);
-        console.log(task);
+        gameService.loadTaskTags(task.gameId, task.id).then(tags => {
+            setTags(tags);
+        });
     }, [task]);
 
     function startEditing() {
@@ -75,8 +79,20 @@ export const TaskCard = ({task, onChange, onDelete}) => {
             </CardContent>
             
             <CardFooter className="p-3 flex flex-row-reverse justify-between items-center">
-                { (!editing && <Button variant="ghost" onClick={()=>startEditing()}>✏</Button>)
-                    ||
+                { (!editing &&
+                        <>
+                            <div>
+                                {[...new Set(tags.map(t=>t.trigger))].map(trigger=>(<div key={trigger}>{
+                                    (trigger === 'AUTO' && <>🎟</>) ||
+                                    (trigger === 'MANUAL' && <>👩‍⚖️</>) ||
+                                    (trigger === 'PHOTO' && <>📸</>)
+                                    }</div>
+                                ))
+                                }
+                            </div>
+                            <Button variant="ghost" onClick={()=>startEditing()}>✏</Button>
+                        </>
+                    ) ||
                         <>
                             <div>
                                 <Button variant="ghost" onClick={saveTask}>✔</Button>

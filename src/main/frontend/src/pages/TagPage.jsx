@@ -10,15 +10,26 @@ export const TagPage = () => {
     const { hash } = useParams();
     const { user } = useAuth();
     const [tag, setTag] = useState(null);
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        setTag(tagService.loadTag(hash));
+        tagService.loadTag(hash)
+            .then((tagData) => {
+                setTag(tagData);
+                setLoaded(true)
+            });
     }, [hash])
+
+    function handleTagAssignment(tag) {
+        const saveTag = {...tag, hash: hash};
+        console.log("saving", saveTag)
+        tagService.saveTag(saveTag).then(setTag);
+    }
 
     return (
         <Card className="shadow-xl max-w-fit p-6 m-auto mt-6">
             <CardHeader>
-                <CardTitle className="border-2 border-slate-800 p-3">#{hash}</CardTitle>
+                <CardTitle className="border-2 border-slate-800 p-3 text-center">#{hash}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center gap-10">
                 <BigLogo className="lg:max-h-[200px]"/>
@@ -30,13 +41,13 @@ export const TagPage = () => {
                                 - if unclaimed, game is locked, or not playing, give error msg
                     */}
 
-                    { ( user && (tag && <TagConfig tag={tag} user={user} onChange={setTag}/> )
+                    { ( user && (tag && <TagConfig tag={tag} user={user} onChange={handleTagAssignment}/> )
                         )
                         || ( // !user
-                            ( tag && (tag.game &&
+                            ( tag && (tag.gameId &&
                                 <>You found a tag. If only this was implemented.</>
                             )
-                            || ( // !tag.game
+                            || ( loaded && // !tag.game
                                 <>
                                     <p className="max-w-lg">
                                         You found an unlinked scavenger hunt tag. This tag isn't connected to any game

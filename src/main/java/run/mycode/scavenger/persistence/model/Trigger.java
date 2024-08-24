@@ -1,10 +1,11 @@
 package run.mycode.scavenger.persistence.model;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import run.mycode.scavenger.web.dto.TagDto;
+
 import java.io.Serializable;
 
 @Entity 
@@ -28,9 +29,20 @@ public abstract class Trigger implements Serializable {
 
     private TriggerType triggerType;
 
-    public static enum TriggerType {
+    public enum TriggerType {
         AUTO,
         MANUAL,
         PHOTO
-    }   
+    }
+
+    public TagDto toDto() {
+        Long gameId = this.getGame() == null ? null : this.getGame().getId();
+        Long taskId = this.getTask() == null ? null : this.getTask().getId();
+
+        TagDto dto = new TagDto();
+        dto.setGameId(gameId);
+        dto.setTaskId(taskId);
+        dto.setTrigger(this.getTriggerType().toString());
+        return dto;
+    }
 }

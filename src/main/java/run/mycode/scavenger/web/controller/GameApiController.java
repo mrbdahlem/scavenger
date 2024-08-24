@@ -13,8 +13,11 @@ import run.mycode.scavenger.service.GameService;
 import run.mycode.scavenger.service.HtmlSanitizerService;
 import run.mycode.scavenger.web.dto.GameDto;
 import run.mycode.scavenger.persistence.model.Task;
+import run.mycode.scavenger.persistence.model.Trigger;
+import run.mycode.scavenger.web.dto.TagDto;
 import run.mycode.scavenger.web.dto.TaskDto;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -118,7 +121,7 @@ public class GameApiController {
         Task task = gameService.getTask(taskId);
 
         if (task == null) {
-            logger.warn("Editor {} looking for task {}, not found in game {}", editor.getUsername(), taskId, task.getGame().getId());
+            logger.warn("Editor {} looking for task {}, not found.", editor.getUsername(), taskId);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
         }
 
@@ -196,6 +199,25 @@ public class GameApiController {
 
         logger.info("{} deleted task {} in game {}", editor.getUsername(), taskId, game.getId());
         return "\"Task deleted\"";
+    }
+
+    @GetMapping("/api/games/{gameId}/tasks/{taskId}/tags")
+    public Iterable<TagDto> getTaskTags(@PathVariable Long gameId, @PathVariable Long taskId, Authentication auth) {
+        Editor editor = (Editor)auth.getPrincipal();
+
+        final Game game = loadGameAndVerifyEditor(gameId, editor);
+
+        final Task task = game.getTask(taskId);
+
+        if (task == null) {
+            logger.warn("Editor {} looking for tags for task {} not found in game {}", editor.getUsername(), taskId,
+                    game.getId());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task " + taskId + " not found.");
+        }
+
+        logger.info("{} getting tags for task {} in game {}", editor.getUsername(), taskId, game.getId());
+        List<Trigger> triggers = task.getTriggers();
+        return triggers.stream().map(Trigger::toDto).collect(Collectors.toList());
     }
 
     /**

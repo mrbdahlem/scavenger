@@ -7,10 +7,10 @@ import {useMediaQuery} from "@/hooks/use-media-query";
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command";
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 
-const ItemSelect = ({onChange, items: items, setTitle}) => {
+const ItemSelect = ({onChange, items: items, setTitle, value}) => {
 
     const [open, setOpen] = useState(false);
-    const [item, setItem] = useState(null);
+    const [item, setItem] = useState(value);
 
     function handleItemChange(item) {
         setItem(item);

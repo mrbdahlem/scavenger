@@ -9,7 +9,8 @@ export const gameService = {
     getTasks,
     loadTask,
     saveTask,
-    deleteTask
+    deleteTask,
+    loadTaskTags
 };
 export default gameService;
 
@@ -99,6 +100,15 @@ function deleteTask(gameId, taskId) {
     };
 
     return fetch(`${config.apiUrl}/games/${gameId}/tasks/${taskId}`, requestOptions).then(handleResponse);
+}
+
+function loadTaskTags(gameId, taskId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${config.apiUrl}/games/${gameId}/tasks/${taskId}/tags`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

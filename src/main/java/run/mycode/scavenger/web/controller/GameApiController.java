@@ -174,6 +174,8 @@ public class GameApiController {
         final String description = sanitizer.sanitize(taskData.getDescription());
         task.setTitle(taskData.getName());
         task.setDescription(description);
+        final String completedDescription = sanitizer.sanitize(taskData.getCompletedDescription());
+        task.setCompletedDescription(description);
 
         // Save the updated task to the database
         TaskDto updated = gameService.updateTask(task).toDto();

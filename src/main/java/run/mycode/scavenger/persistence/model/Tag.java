@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
@@ -18,7 +17,7 @@ import run.mycode.scavenger.web.dto.TagDto;
 @Getter
 @Setter
 @ToString
-public class Tag extends Trigger implements Serializable {
+public class Tag extends Trigger{
 
     @Column(unique=true)
     UUID hash;

@@ -29,6 +29,8 @@ public class Task {
 
     @Column(columnDefinition="TEXT")
     private String description;
+    @Column(columnDefinition="TEXT")
+    private String completedDescription;
 
     @ManyToOne(fetch= FetchType.LAZY, optional = false)
     @JoinColumn(name = "game_id")
@@ -57,7 +59,7 @@ public class Task {
     }
 
     public TaskDto toDto() {
-        return new TaskDto(id, title, description, game.getId());
+        return new TaskDto(id, title, description, completedDescription, game.getId());
     }
 
 }

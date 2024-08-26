@@ -22,7 +22,6 @@ public class EndGameTask extends Task {
     @Override
     public TaskDto toDto() {
         final TaskDto dto = super.toDto();
-        dto.setStart(false);
         dto.setEnd(true);
         return dto;
     }

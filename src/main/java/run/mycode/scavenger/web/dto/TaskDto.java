@@ -14,6 +14,7 @@ public class TaskDto {
     private String description;
     private boolean isStart;
     private boolean isEnd;
+    private String completedDescription;
 
     @NotNull
     private Long gameId;
@@ -21,10 +22,11 @@ public class TaskDto {
     public TaskDto() {
     }
 
-    public TaskDto(Long id, String title, String description, Long gameId) {
+    public TaskDto(Long id, String title, String description,  String completedDescription, Long gameId) {
         this.id = id;
         this.name = title;
         this.description = description;
         this.gameId = gameId;
+        this.completedDescription = completedDescription;
     }
 }

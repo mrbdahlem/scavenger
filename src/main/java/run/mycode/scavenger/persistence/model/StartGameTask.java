@@ -22,7 +22,6 @@ public class StartGameTask extends Task {
     public TaskDto toDto() {
         final TaskDto dto = super.toDto();
         dto.setStart(true);
-        dto.setEnd(false);
         return dto;
     }
 }

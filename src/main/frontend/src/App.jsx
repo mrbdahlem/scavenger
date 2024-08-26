@@ -4,6 +4,9 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {AuthProvider} from "./hooks/useAuth.jsx";
 import {TagPage} from "@/pages/TagPage.jsx";
 import { HomePage } from "@/pages/HomePage.jsx";
+import { PlayerProvider } from "./hooks/usePlayer.jsx";
+import { PlayPage } from "./pages/PlayPage.jsx";
+import { StatsPage } from "./pages/StatsPage.jsx";
 
 const SignUpPage = lazy(() => import("@/pages/SignUpPage.jsx"));
 const AdminPage = lazy(() => import("@/pages/Admin.jsx"));
@@ -48,6 +51,8 @@ function App() {
                     </ProtectedRoute>
                 } />
                 <Route path="/tag/:hash" element={<TagPage />} />
+                <Route path="/play" element={<PlayPage />} />
+                <Route path="/stats/:player" element={<StatsPage />} />
                 <Route path="*" element={
                     <Navigate to="/" />
                 } />
@@ -56,7 +61,9 @@ function App() {
 
     return (
         <AuthProvider>
+            <PlayerProvider>
                 <RouterProvider router={router} />
+            </PlayerProvider>
         </AuthProvider>
     )
 }

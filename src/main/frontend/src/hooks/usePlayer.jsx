@@ -16,8 +16,8 @@ export const PlayerProvider = ({ children }) => {
     }
 
     const endGame = () => {
-        playService.endPlaying(player);
         setPlayer(null);
+        return playService.endPlaying(player);
     }   
 
     const value= useMemo(() => ({ player, startGame, endGame }), [player]);

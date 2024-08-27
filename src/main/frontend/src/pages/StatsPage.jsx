@@ -44,7 +44,7 @@ export const StatsPage = () => {
         <div className="p-5">
             <h1 className="text-lg font-bold">Stats {playerName && <>for player {playerName}</>}</h1>
             { gameData && 
-                <fieldSet className="mt-5 border rounded border-black p-3">
+                <fieldset className="mt-5 border rounded border-black p-3">
                     <legend className="px-1 font-bold">Play Stats:</legend>
                     <dl className="divide-y divide-gray-100">
                         {stats.map((stat) => (
@@ -53,7 +53,7 @@ export const StatsPage = () => {
                             </div>
                             ))}                        
                     </dl>
-                </fieldSet>
+                </fieldset>
             }
             <PlayerProgress player={player} setName={setPlayerName} /> 
         </div>

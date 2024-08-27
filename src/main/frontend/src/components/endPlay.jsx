@@ -1,14 +1,13 @@
 import { Button } from '@/components/ui/button';
-import {useNavigate} from "react-router-dom";
-import {usePlayer} from "@/hooks/usePlayer.jsx";
-import playService from '../lib/service/play.service';
+import { useNavigate } from "react-router-dom";
+import { usePlayer } from "@/hooks/usePlayer.jsx";
 
 export const EndPlay = ({tag}) => {
-    const {player} = usePlayer();
+    const {player, endGame } = usePlayer();
     const navigate = useNavigate();
 
-    function endGame() {
-        playService.endPlaying(player).then(() => {
+    function end() {
+        endGame().then(() => {
             navigate(`/stats/${player}`);
         });
     }
@@ -18,7 +17,7 @@ export const EndPlay = ({tag}) => {
             <div className="flex flex-col gap-5">
                 This will end your current scavenger hunt.<br/> Are you really done?
                 <Button onClick={()=>navigate("/play")}>No, continue the hunt!</Button>
-                <Button onClick={endGame}>Yes, I&apos;m done.</Button>
+                <Button onClick={end}>Yes, I&apos;m done.</Button>
             </div>
         )
     }

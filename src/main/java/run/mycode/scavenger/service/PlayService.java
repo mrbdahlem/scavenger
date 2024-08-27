@@ -60,10 +60,13 @@ public class PlayService {
 
         Play play = new Play(game, playerName);
 
-        play.setPercentComplete(1 / game.getTasks().size()); // Record starting the game as a task completion
-
+        play.setPercentComplete((1 / game.getTasks().size()) * 100); // Record starting the game as a task completion
+        
         play = playRepo.save(play);
         logger.info("Created new play with id: {} for game: {} for player {}", play.getId(), game.getId(), playerName);
+        
+        game.setNumPlays(game.getNumPlays() + 1);
+        gameRepo.save(game);
 
         return play;
     }
@@ -89,8 +92,14 @@ public class PlayService {
         play.setPlayEnded(true);
 
         // Calculate starting and ending the game as task completions along with the actual task completions
-        play.setPercentComplete((2 + play.getTaskCompletions().size()) / play.getGame().getTasks().size());
+        play.setPercentComplete(((2 + play.getTaskCompletions().size()) / play.getGame().getTasks().size()) * 100);
         play = playRepo.save(play);
+
+        if (play.getPercentComplete() == 100) {
+            Game game = play.getGame();
+            game.setNumCompletions(game.getNumCompletions() + 1);
+            gameRepo.save(game);
+        }
 
         logger.info("Ended play with id: {} for game: {} for player {}", play.getId(), play.getGame().getTitle(), play.getName());
 
@@ -143,7 +152,7 @@ public class PlayService {
         tc = taskCompletionRepository.save(tc);
         logger.info("Player {} tagged a tag with hash {} in play with id {}", play.getName(), tagHash, playId);
 
-        int percentDone = (1 + play.getTaskCompletions().size()) / play.getGame().getTasks().size();
+        int percentDone = (((1 + play.getTaskCompletions().size()) / play.getGame().getTasks().size()) * 100);
         play.setPercentComplete(percentDone);
         playRepo.save(play);
 

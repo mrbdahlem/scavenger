@@ -32,12 +32,12 @@ public class PlayApiController {
     }
 
     /**
-     * Get the information for a game play
+     * Get a summary of information for a game play
      * @param playId the game play id
      * @return the game play information
      */
     @GetMapping("/api/play/player/{playId}") 
-    public PlayDto getPlayInfo(@PathVariable Long playId) {
+    public PlayDto getPlaySummary(@PathVariable Long playId) {
         Play play = playService.getPlay(playId);
         if (play == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Play not found.");
@@ -158,14 +158,5 @@ public class PlayApiController {
         dto.setTasks(taskDtos);
 
         return dto;
-    }
-
-    public PlayDto getPlaySummary(Long playId) {
-        Play play = playService.getPlay(playId);
-        if (play == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Play not found.");
-        }
-        return play.toDto();
-    }
-    
+    }    
 }

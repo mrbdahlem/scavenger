@@ -61,7 +61,6 @@ export const TaskCard = ({task, onChange, onDelete}) => {
                             || // editing
                             <>
                                 <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                                <p className="font-light italic text-xs">(participants will not see the task name until they complete the task)</p>
                             </>
                         }
                     </>

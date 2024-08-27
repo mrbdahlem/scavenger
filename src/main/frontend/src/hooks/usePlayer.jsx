@@ -1,5 +1,5 @@
 import {useState, createContext, useContext, useMemo, useEffect} from 'react';
-import { tagService } from '@/lib/service/tag.service';
+import { playService } from '@/lib/service/play.service';
 const PlayerContext = createContext(null);
 
 export const PlayerProvider = ({ children }) => {
@@ -10,13 +10,13 @@ export const PlayerProvider = ({ children }) => {
     }, [player]);
 
     const startGame = async (game, name) => {
-        tagService.startPlaying(game, name).then((data) => {
+        playService.startPlaying(game, name).then((data) => {
             setPlayer(data.id);
         });
     }
 
     const endGame = () => {
-        tagService.endPlaying(player);
+        playService.endPlaying(player);
         setPlayer(null);
     }   
 

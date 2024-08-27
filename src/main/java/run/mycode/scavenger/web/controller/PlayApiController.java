@@ -158,5 +158,11 @@ public class PlayApiController {
         dto.setTasks(taskDtos);
 
         return dto;
-    }    
+    }
+
+    @GetMapping("/api/play/game/{gameId}")
+    public List<PlayDto> getGamePlays(@PathVariable Long gameId) {
+        List<Play> plays = playService.getPlaysForGame(gameId);
+        return plays.stream().map(Play::toDto).collect(Collectors.toList());
+    }
 }

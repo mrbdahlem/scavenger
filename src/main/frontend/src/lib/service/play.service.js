@@ -5,7 +5,8 @@ export const playService = {
     endPlaying,
     getGameData,
     getPlayStats,
-    tag
+    tag,
+    getCurrentPlays
 };
 
 export default playService;
@@ -53,6 +54,14 @@ function getPlayStats(playerId) {
     };
 
     return fetch(`${config.apiUrl}/play/player/${playerId}`, requestOptions).then(handleResponse);
+}
+
+function getCurrentPlays(gameId) {
+    const requestOptions = {
+        method: 'GET',
+    };
+
+    return fetch(`${config.apiUrl}/play/game/${gameId}`, requestOptions).then(handleResponse);
 }
 
 function handleResponse(response) {

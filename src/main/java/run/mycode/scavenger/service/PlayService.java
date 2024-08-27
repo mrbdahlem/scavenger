@@ -1,5 +1,6 @@
 package run.mycode.scavenger.service;
 
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,7 @@ public class PlayService {
 
         Play play = new Play(game, playerName);
 
-        play.setPercentComplete((1 / game.getTasks().size()) * 100); // Record starting the game as a task completion
+        play.setPercentComplete((int)((1.0 / game.getTasks().size()) * 100)); // Record starting the game as a task completion
         
         play = playRepo.save(play);
         logger.info("Created new play with id: {} for game: {} for player {}", play.getId(), game.getId(), playerName);
@@ -92,7 +93,7 @@ public class PlayService {
         play.setPlayEnded(true);
 
         // Calculate starting and ending the game as task completions along with the actual task completions
-        play.setPercentComplete(((2 + play.getTaskCompletions().size()) / play.getGame().getTasks().size()) * 100);
+        play.setPercentComplete((int)(((2.0 + play.getTaskCompletions().size()) / play.getGame().getTasks().size()) * 100));
         play = playRepo.save(play);
 
         if (play.getPercentComplete() == 100) {
@@ -152,10 +153,20 @@ public class PlayService {
         tc = taskCompletionRepository.save(tc);
         logger.info("Player {} tagged a tag with hash {} in play with id {}", play.getName(), tagHash, playId);
 
-        int percentDone = (((1 + play.getTaskCompletions().size()) / play.getGame().getTasks().size()) * 100);
+        // Calculate percent done, including starting the game as task and the current completion along with the previous task completions
+        int percentDone = (int)(((2.0 + play.getTaskCompletions().size()) / play.getGame().getTasks().size()) * 100); 
         play.setPercentComplete(percentDone);
         playRepo.save(play);
 
         return tc;
+    }
+
+    /**
+     * Get all plays for a game
+     * @param gameId the id of the game to get plays for
+     * @return the plays for the game with the given id
+     */
+    public List<Play> getPlaysForGame(Long gameId) {
+        return playRepo.findByGameId(gameId);
     }
 }

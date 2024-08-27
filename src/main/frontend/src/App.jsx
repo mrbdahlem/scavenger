@@ -13,6 +13,7 @@ const AdminPage = lazy(() => import("@/pages/Admin.jsx"));
 const GamesPage = lazy(() => import("@/pages/GamesPage.jsx"));
 const GamePage = lazy(() => import("@/pages/GamePage.jsx"));
 const LoginPage = lazy(() => import("@/pages/LoginPage.jsx"));
+const WatchPage = lazy(() => import("@/pages/WatchPage.jsx"));
 
 
 function App() {
@@ -33,6 +34,13 @@ function App() {
                     <ProtectedRoute redirect="/games">
                         <Suspense>
                             <GamesPage />
+                        </Suspense>
+                    </ProtectedRoute>
+                } />
+                <Route path="/watch/:gameId" element={
+                    <ProtectedRoute redirect="/games">
+                        <Suspense>
+                            <WatchPage />
                         </Suspense>
                     </ProtectedRoute>
                 } />

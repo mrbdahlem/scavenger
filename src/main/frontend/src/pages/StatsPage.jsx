@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { PlayerProgress } from "@/components/playerProgress";
 import { useEffect, useState } from "react";
+import { hms } from "@/lib/utils";
 import playService from "../lib/service/play.service";
 import logo from "../assets/scavenger.png";
 
@@ -25,19 +26,6 @@ export const StatsPage = () => {
         stats = stats.concat([["Started", started.toLocaleString()]]);
         stats = stats.concat([["Time to completion", hms(length)]]);
         console.log(stats);
-    }
-
-    function hms(ms) {
-        // Convert to seconds:
-        let seconds = ms / 1000;
-        // Extract hours:
-        let hours = parseInt( seconds / 3600 ); // 3,600 seconds in 1 hour
-        seconds = seconds % 3600; // seconds remaining after extracting hours
-        // Extract minutes:
-        let minutes = parseInt( seconds / 60 ); // 60 seconds in 1 minute
-        // Keep only seconds not extracted to minutes:
-        seconds = parseInt(seconds % 60);
-        return hours.toString().padStart(2, "0") + ":" + (minutes.toString().padStart(2, "0")) + ":" + seconds.toString().padStart(2, "0");
     }
 
     return (

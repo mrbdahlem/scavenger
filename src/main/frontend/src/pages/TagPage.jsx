@@ -18,7 +18,6 @@ export const TagPage = () => {
     useEffect(() => {
         tagService.loadTag(hash)
             .then((tagData) => {
-                console.log(tagData);
                 setTag(tagData);
                 setLoaded(true)
             });

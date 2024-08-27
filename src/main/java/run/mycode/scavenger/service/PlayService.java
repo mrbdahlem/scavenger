@@ -6,8 +6,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import run.mycode.scavenger.persistence.dao.GameRepository;
 import run.mycode.scavenger.persistence.dao.PlayRepository;
+import run.mycode.scavenger.persistence.dao.TaskCompletionRepository;
+import run.mycode.scavenger.persistence.dao.TagRepository;
+import run.mycode.scavenger.persistence.model.EndGameTask;
 import run.mycode.scavenger.persistence.model.Game;
 import run.mycode.scavenger.persistence.model.Play;
+import run.mycode.scavenger.persistence.model.StartGameTask;
+import run.mycode.scavenger.persistence.model.Tag;
+import run.mycode.scavenger.persistence.model.Task;
+import run.mycode.scavenger.persistence.model.TaskCompletion;
+import run.mycode.scavenger.persistence.model.Trigger;
 
 @Service
 @Transactional
@@ -16,10 +24,14 @@ public class PlayService {
 
     private final PlayRepository playRepo;
     private final GameRepository gameRepo;
+    private final TagRepository tagRepo;
+    private final TaskCompletionRepository taskCompletionRepository;
     
-    public PlayService(PlayRepository playRepo,  GameRepository gameRepo) {
+    public PlayService(PlayRepository playRepo,  GameRepository gameRepo, TagRepository tagRepo, TaskCompletionRepository taskCompletionRepository) {
         this.playRepo = playRepo;
         this.gameRepo = gameRepo;
+        this.tagRepo = tagRepo;
+        this.taskCompletionRepository = taskCompletionRepository;
     }
 
     /**
@@ -83,5 +95,54 @@ public class PlayService {
         logger.info("Ended play with id: {} for game: {} for player {}", play.getId(), play.getGame().getTitle(), play.getName());
 
         return play;
+    }
+
+    public TaskCompletion getTag(Long playId, String tagHash) {
+        Tag tag = tagRepo.findByHash(Tag.convertStringToUuid(tagHash));
+        if (tag == null) {
+            logger.error("Attempting to get tag {} in play with id {}; tag not found", tagHash, playId);
+            return null;
+        }
+        return taskCompletionRepository.findByTaskIdAndPlayerId(tag.getTask().getId(), playId);
+    }
+
+    public TaskCompletion tag(Long playId, String tagHash) {
+        Play play = playRepo.findById(playId).orElse(null);
+        if (play == null) {
+            logger.error("Attempting to submit tag {} in play with id {}; play not found", tagHash, playId);
+            return null;
+        }
+
+        Tag tag = tagRepo.findByHash(Tag.convertStringToUuid(tagHash));
+        if (tag == null) {
+            logger.error("Attempting to submit tag {} in play with id {}; tag not found", tagHash, playId);
+            return null;
+        }
+
+        if (tag.getGame() != play.getGame()) {
+            logger.error("Attempting to submit tag {} in play with id {}; tag not in game", tagHash, playId);
+            return null;
+        }
+
+        TaskCompletion tc = taskCompletionRepository.findByTaskIdAndPlayerId(tag.getTask().getId(), playId);
+        if (tc != null) {
+            logger.error("Attempting to submit tag {} in play with id {}; tag already completed", tagHash, playId);
+            return tc;
+        }
+
+        tc = new TaskCompletion();
+        tc.setPlayer(play);
+        tc.setTask(tag.getTask());
+        tc.setTriggerType(tag.getTriggerType());
+
+        if (tc.getTriggerType() != Trigger.TriggerType.AUTO) {
+            tc.setApprovalStatus(TaskCompletion.ApprovalStatus.PENDING);
+        } else {
+            tc.setApprovalStatus(TaskCompletion.ApprovalStatus.APPROVED);
+        }
+        tc = taskCompletionRepository.save(tc);
+        logger.info("Player {} tagged a tag with hash {} in play with id {}", play.getName(), tagHash, playId);
+
+        return tc;
     }
 }

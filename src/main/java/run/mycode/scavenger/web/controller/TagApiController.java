@@ -30,7 +30,7 @@ public class TagApiController {
 
     @GetMapping("/api/tag/public/{hashStr}")
     public TagDto getTag(@PathVariable String hashStr) {
-        final UUID hash = convertStringToUuid(hashStr);
+        final UUID hash = Tag.convertStringToUuid(hashStr);
         Tag tag = tagService.getOrCreateTagWithHash(hash);
 
         TagDto dto = tag.toDto();
@@ -51,7 +51,9 @@ public class TagApiController {
             dto.setEnd(true);
         }
         else {
-            logger.info("????");
+            dto.setMessageTitle(task.getTitle());
+            dto.setMessage(task.getDescription());
+            dto.setCompletedMessage(task.getCompletedDescription());
         }
         return dto;
     }
@@ -59,7 +61,7 @@ public class TagApiController {
     @PostMapping("/api/tag/{hashStr}")
     public TagDto saveTag(@PathVariable String hashStr, @RequestBody TagDto tagData) {
 
-        final UUID hash = convertStringToUuid(hashStr);
+        final UUID hash = Tag.convertStringToUuid(hashStr);
         Tag tag = tagService.getOrCreateTagWithHash(hash);
 
         logger.info("Updating tag with hash: {} and id: {} linking to {}.{}", hash, tag.getId(), tagData.getGameId(), tagData.getTaskId());
@@ -80,47 +82,5 @@ public class TagApiController {
         logger.info("Updated tag {}", tag.toString());
 
         return tag.toDto();
-    }
-
-    public static String convertUuidToString(UUID uuid) {
-        return (convertString(uuid.getMostSignificantBits()) +
-                convertString(uuid.getLeastSignificantBits()));
-    }
-
-    public static UUID convertStringToUuid(String s) {
-        if (s.length() == 22) {
-            return new UUID(convertLong(s.substring(0, 11)), convertLong(s.substring(11)));
-        }
-        else if (s.length() == 36) {
-            return UUID.fromString(s);
-        }
-        else {
-            throw new IllegalArgumentException("Invalid UUID string: " + s);
-        }
-    }
-
-    private static final String az = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-";
-    private static String convertString(long num) {
-        byte[] s = new byte[11];
-
-        for (int i = 0; i < 11; i++) {
-            int digit = (int)(num & 0x3fL);
-            s[10 - i] = (byte)az.charAt(digit);
-            num = num >> 6;
-        }
-
-        return new String(s);
-
-    }
-
-    private static long convertLong(String s) {
-        long l = 0;
-
-        for (int i = 0; i < 11; i++) {
-            l = l << 6;
-            l = l + az.indexOf(s.charAt(i));
-        }
-
-        return l;
     }
 }

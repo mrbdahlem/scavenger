@@ -14,7 +14,6 @@ export const PlayPage = () => {
         if (player){
             // fetch game data
             playService.getGameData(player).then((data) => {
-                console.log(data);
                 setGame(data);
             });
         }

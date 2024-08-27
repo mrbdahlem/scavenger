@@ -4,7 +4,8 @@ export const playService = {
     startPlaying,
     endPlaying,
     getGameData,
-    getPlayStats
+    getPlayStats,
+    tag
 };
 
 export default playService;
@@ -26,6 +27,15 @@ function endPlaying(playerId) {
     };
 
     return fetch(`${config.apiUrl}/play/end/${playerId}`, requestOptions).then(handleResponse);
+}
+
+function tag(player, tag) {
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json'},
+    };
+
+    return fetch(`${config.apiUrl}/play/${player}/tag/${tag.hash}`, requestOptions).then(handleResponse);
 }
 
 function getGameData(playerId) {

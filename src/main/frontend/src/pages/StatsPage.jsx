@@ -11,7 +11,6 @@ export const StatsPage = () => {
 
     useEffect(()=>{
         playService.getPlayStats(player).then((data) => {
-            console.log(data);
             setPlayerName(data.name);
             setGameData(data);
         });

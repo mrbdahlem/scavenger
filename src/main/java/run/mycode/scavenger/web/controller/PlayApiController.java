@@ -31,6 +31,11 @@ public class PlayApiController {
         this.playService = playService;
     }
 
+    /**
+     * Get the information for a game play
+     * @param playId the game play id
+     * @return the game play information
+     */
     @GetMapping("/api/play/player/{playId}") 
     public PlayDto getPlayInfo(@PathVariable Long playId) {
         Play play = playService.getPlay(playId);
@@ -40,6 +45,12 @@ public class PlayApiController {
         return play.toDto();
     }
 
+    /**
+     * Start a new game play
+     * @param gameId the id of the game to start
+     * @param playerName the name of the player starting the game
+     * @return the new game play
+     */
     @PostMapping("/api/play/start/{gameId}")
     public PlayDto startPlaying(@PathVariable Long gameId, @RequestBody String playerName) {
         if (gameId == null) {
@@ -51,11 +62,43 @@ public class PlayApiController {
         return play.toDto();
     }
 
+    /**
+     * End a game play
+     * @param playId the id of the game play to end
+     * @return the ended game play
+     */
     @PostMapping("/api/play/end/{playId}")
     public PlayDto endPlaying(@PathVariable Long playId) {
         Play play = playService.end(playId);
         logger.info("Player {} ended their game.", playId);
         return play.toDto();
+    }
+
+    /**
+     * Handle a player finding a tag
+     * @param playId the player's game play id
+     * @param tagHash the hash from the tag found
+     * @return the updated game play task
+     */
+    @GetMapping("/api/play/{playId}/tag/{tagHash}")
+    public GamePlayTaskDto tag(@PathVariable Long playId, @PathVariable String tagHash) {
+        TaskCompletion tc = null;
+        
+        try {
+            tc = playService.tag(playId, tagHash);
+        }
+        catch (Exception e) {
+            if (e instanceof java.sql.SQLIntegrityConstraintViolationException || 
+                e instanceof org.springframework.dao.DataIntegrityViolationException) {
+                return playService.getTag(playId, tagHash).toDto();
+            }
+            logger.warn("Exception with player {} tag {}: {}", playId, tagHash, e.getMessage());
+        }
+        
+        if (tc == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game or tag not found.");
+        }
+        return tc.toDto();
     }
 
     @GetMapping("/api/play/{playId}")
@@ -96,7 +139,7 @@ public class PlayApiController {
                         taskDto.setCompletedTime(tc.getCompletedTime());
 
                         TaskCompletion.ApprovalStatus status = tc.getApprovalStatus();
-                        taskDto.setApprovalStatus(status.toString());
+                        taskDto.setApprovalStatus(status.name());
 
                         if (status == TaskCompletion.ApprovalStatus.APPROVED) {
                             taskDto.setCompletedDescription(task.getCompletedDescription());

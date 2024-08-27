@@ -16,6 +16,7 @@ public class TagDto {
     private String trigger;
     private String messageTitle;
     private String message;
+    private String completedMessage;
     private boolean isStart;
     private boolean isEnd;
 

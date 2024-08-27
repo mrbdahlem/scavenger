@@ -28,6 +28,10 @@ export const Header = ({ children, className}) => {
                     <Tab to="/games">
                         Games
                     </Tab>
+                    <Tab to="/tags">
+                        Tags
+                    </Tab>
+
                 </div>
                 <div className={cn("flex items-center space-x-5", className)}>
                     { children }

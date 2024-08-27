@@ -14,7 +14,7 @@ const GamesPage = lazy(() => import("@/pages/GamesPage.jsx"));
 const GamePage = lazy(() => import("@/pages/GamePage.jsx"));
 const LoginPage = lazy(() => import("@/pages/LoginPage.jsx"));
 const WatchPage = lazy(() => import("@/pages/WatchPage.jsx"));
-
+const TagsPage = lazy(() => import("@/pages/TagsPage.jsx"));
 
 function App() {
     const router = createBrowserRouter(
@@ -41,6 +41,13 @@ function App() {
                     <ProtectedRoute redirect="/games">
                         <Suspense>
                             <WatchPage />
+                        </Suspense>
+                    </ProtectedRoute>
+                } />
+                <Route path="/tags" element={
+                    <ProtectedRoute redirect="/tags">
+                        <Suspense>
+                            <TagsPage />
                         </Suspense>
                     </ProtectedRoute>
                 } />

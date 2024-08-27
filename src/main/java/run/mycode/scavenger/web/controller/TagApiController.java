@@ -31,7 +31,23 @@ public class TagApiController {
     @GetMapping("/api/tag/public/{hashStr}")
     public TagDto getTag(@PathVariable String hashStr) {
         final UUID hash = Tag.convertStringToUuid(hashStr);
-        Tag tag = tagService.getOrCreateTagWithHash(hash);
+        
+        Tag tag = null;
+
+        try {
+            tag = tagService.getOrCreateTagWithHash(hash);
+        }
+        catch (Exception e) {
+            if (e instanceof java.sql.SQLIntegrityConstraintViolationException || 
+                e instanceof org.springframework.dao.DataIntegrityViolationException) {
+                tag = tagService.getTagByHash(hash);
+            }
+            else {
+                logger.warn("Exception handling tag {}", hashStr, e.getMessage());
+                return null;
+            }
+        }
+        
 
         TagDto dto = tag.toDto();
 

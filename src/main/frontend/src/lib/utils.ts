@@ -29,3 +29,29 @@ export function hms(ms) {
     seconds = parseInt(seconds % 60);
     return hours.toString().padStart(2, "0") + ":" + (minutes.toString().padStart(2, "0")) + ":" + seconds.toString().padStart(2, "0");
 }
+
+const az = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-";
+
+export function shortUUID(uuid) {
+    const uid = uuid.replace(/-/g, "");
+    const msb = "0x" + uid.substring(0, 16);
+    const lsb = "0x" + uid.substring(16);
+
+    let msbInt = BigInt(msb);
+    let lsbInt = BigInt(lsb);
+
+    const str = longToString(msbInt) + longToString(lsbInt);
+    console.log(uuid, str);
+    return str;
+}
+
+function longToString(value) {
+    const initval = value;
+    let result = "";
+    for (let i = 0; i < 11; i++) {
+        
+        result = az.charAt(Number(BigInt.asUintN(6, value))) + result;
+        value = value / 64n;
+    }
+    return result;
+}

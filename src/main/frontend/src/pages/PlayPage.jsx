@@ -22,7 +22,7 @@ export const PlayPage = () => {
     if (!playerId) {
         return (
             <>
-                {/*<GetPlayerID onChange={setPlayerId} /> */}
+                You aren&apos;t currently playing.
             </>
         )
         
@@ -37,7 +37,7 @@ export const PlayPage = () => {
         <div className="w-full px-5">
             { game && (
                 <>
-                    <PlayerProgress player={playerId} />
+                    <PlayerProgress player={playerId} showLogo="true"/>
                 </>
 
             ) }

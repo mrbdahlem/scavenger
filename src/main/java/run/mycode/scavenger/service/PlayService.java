@@ -143,6 +143,10 @@ public class PlayService {
         tc = taskCompletionRepository.save(tc);
         logger.info("Player {} tagged a tag with hash {} in play with id {}", play.getName(), tagHash, playId);
 
+        int percentDone = (1 + play.getTaskCompletions().size()) / play.getGame().getTasks().size();
+        play.setPercentComplete(percentDone);
+        playRepo.save(play);
+
         return tc;
     }
 }

@@ -31,9 +31,9 @@ export const TagPage = () => {
 
     return (
         <Card className="shadow-xl max-w-fit p-6 m-auto mt-6 h-screen md:h-auto">
-            <CardHeader>
-                <CardTitle className="border-2 border-slate-800 p-3 text-center">#{hash}</CardTitle>
-            </CardHeader>
+            {/* <CardHeader> */}
+                {/* <CardTitle className="border-2 border-slate-800 p-3 text-center">#{hash}</CardTitle> */}
+            {/* </CardHeader> */}
             <CardContent className="flex flex-col items-center justify-center gap-10">
                 <BigLogo className="lg:max-h-[200px]"/>
 
@@ -41,7 +41,7 @@ export const TagPage = () => {
                     { ( user && (tag && <TagConfig tag={tag} user={user} onChange={handleTagAssignment}/> )
                         )
                         || ( // !user || !tag
-                            ( tag && (tag.gameId &&  <PlayTag tag={tag} player={player}/> )
+                            ( tag && (tag.gameId && <PlayTag tag={tag} player={player}/> )
                             || ( loaded && // !tag.gameId
                                 <>
                                     <p className="max-w-lg">

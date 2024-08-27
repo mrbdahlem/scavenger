@@ -35,6 +35,7 @@ function tag(player, tag) {
         headers: { 'Content-Type': 'application/json'},
     };
 
+    // console.log(player, tag.hash);
     return fetch(`${config.apiUrl}/play/${player}/tag/${tag.hash}`, requestOptions).then(handleResponse);
 }
 

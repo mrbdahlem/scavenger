@@ -98,6 +98,7 @@ public class PlayApiController {
         if (tc == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Game or tag not found.");
         }
+
         return tc.toDto();
     }
 
@@ -157,6 +158,14 @@ public class PlayApiController {
         dto.setTasks(taskDtos);
 
         return dto;
+    }
+
+    public PlayDto getPlaySummary(Long playId) {
+        Play play = playService.getPlay(playId);
+        if (play == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Play not found.");
+        }
+        return play.toDto();
     }
     
 }

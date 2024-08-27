@@ -58,6 +58,7 @@ public class TagApiController {
 
     @PostMapping("/api/tag/{hashStr}")
     public TagDto saveTag(@PathVariable String hashStr, @RequestBody TagDto tagData) {
+
         final UUID hash = convertStringToUuid(hashStr);
         Tag tag = tagService.getOrCreateTagWithHash(hash);
 
@@ -87,7 +88,15 @@ public class TagApiController {
     }
 
     public static UUID convertStringToUuid(String s) {
-        return new UUID(convertLong(s.substring(0, 11)), convertLong(s.substring(11)));
+        if (s.length() == 22) {
+            return new UUID(convertLong(s.substring(0, 11)), convertLong(s.substring(11)));
+        }
+        else if (s.length() == 36) {
+            return UUID.fromString(s);
+        }
+        else {
+            throw new IllegalArgumentException("Invalid UUID string: " + s);
+        }
     }
 
     private static final String az = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-";

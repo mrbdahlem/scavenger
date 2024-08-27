@@ -28,8 +28,9 @@ public class TagApiController {
         this.gameService = gameService;
     }
 
-    @GetMapping("/api/tag/public/{hash}")
-    public TagDto getTag(@PathVariable UUID hash) {
+    @GetMapping("/api/tag/public/{hashStr}")
+    public TagDto getTag(@PathVariable String hashStr) {
+        final UUID hash = convertStringToUuid(hashStr);
         Tag tag = tagService.getOrCreateTagWithHash(hash);
 
         TagDto dto = tag.toDto();
@@ -55,8 +56,9 @@ public class TagApiController {
         return dto;
     }
 
-    @PostMapping("/api/tag/{hash}")
-    public TagDto saveTag(@PathVariable UUID hash, @RequestBody TagDto tagData) {
+    @PostMapping("/api/tag/{hashStr}")
+    public TagDto saveTag(@PathVariable String hashStr, @RequestBody TagDto tagData) {
+        final UUID hash = convertStringToUuid(hashStr);
         Tag tag = tagService.getOrCreateTagWithHash(hash);
 
         logger.info("Updating tag with hash: {} and id: {} linking to {}.{}", hash, tag.getId(), tagData.getGameId(), tagData.getTaskId());
@@ -77,5 +79,39 @@ public class TagApiController {
         logger.info("Updated tag {}", tag.toString());
 
         return tag.toDto();
+    }
+
+    public static String convertUuidToString(UUID uuid) {
+        return (convertString(uuid.getMostSignificantBits()) +
+                convertString(uuid.getLeastSignificantBits()));
+    }
+
+    public static UUID convertStringToUuid(String s) {
+        return new UUID(convertLong(s.substring(0, 11)), convertLong(s.substring(11)));
+    }
+
+    private static final String az = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-";
+    private static String convertString(long num) {
+        byte[] s = new byte[11];
+
+        for (int i = 0; i < 11; i++) {
+            int digit = (int)(num & 0x3fL);
+            s[10 - i] = (byte)az.charAt(digit);
+            num = num >> 6;
+        }
+
+        return new String(s);
+
+    }
+
+    private static long convertLong(String s) {
+        long l = 0;
+
+        for (int i = 0; i < 11; i++) {
+            l = l << 6;
+            l = l + az.indexOf(s.charAt(i));
+        }
+
+        return l;
     }
 }

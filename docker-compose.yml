@@ -4,8 +4,8 @@ services:
     restart: "always"
     env_file:
       - ~/env_file
-    ports:
-      - 3306
+    #ports:
+    #  - 3306
     volumes:
       - $HOME/mariadb_data:/var/lib/mysql
       - $HOME/mariadb_conf:/etc/mysql
@@ -17,10 +17,10 @@ services:
     restart: "unless-stopped"
     env_file:
       - ~/env_file
-    ports:
-      - 8080:8080
-    expose:
-      - 8080
+    #ports:
+    #  - 8080:8080
+    #expose:
+    #  - 8080
     depends_on:
       - db
     networks:

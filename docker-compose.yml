@@ -7,8 +7,8 @@ services:
     ports:
       - 3306
     volumes:
-      - mariadb_data:/var/lib/mysql
-      - mariadb_conf:/etc/mysql
+      - $HOME/mariadb_data:/var/lib/mysql
+      - $HOME/mariadb_conf:/etc/mysql
     networks: 
       - db
 

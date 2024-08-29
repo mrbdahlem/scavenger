@@ -7,8 +7,8 @@ services:
     ports:
       - 3306
     volumes:
-      - db-config:/etc/mysql
-      - db-data:/var/lib/mysql
+      - db-config:~/db/config
+      - db-data:~/db/data
     networks: 
       - db-backend
 
@@ -23,6 +23,9 @@ services:
     networks:
       - db-backend
       - proxiable
+volumes:
+  db-config:
+  db-data:
 
 networks:
   db-backend:

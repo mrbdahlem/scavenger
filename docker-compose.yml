@@ -14,6 +14,7 @@ services:
 
   backend:
     build: .
+    restart: "unless-stopped"
     env_file:
       - ~/env_file
     ports:

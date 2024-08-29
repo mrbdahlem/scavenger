@@ -34,8 +34,8 @@
 	// "remoteUser": "root"
 	
 	"remoteEnv": {
-		"DATABASE_NAME": "scavenger",
-		"DATABASE_USER": "scavenger",
-		"DATABASE_PW": "scavenger"
+		"MARIADB_DATABASE": "scavenger",
+		"MARIADB_USER": "scavenger",
+		"MARIADB_PASSWORD": "scavenger"
 	}
 }

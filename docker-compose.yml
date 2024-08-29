@@ -18,16 +18,24 @@ services:
     env_file:
       - ~/env_file
     ports:
+      - 8080:8080
+    expose:
       - 8080
     depends_on:
       - db
     networks:
       - db
       - proxiable
+    container_name: scavenger
+    hostname: scavenger
+
 volumes:
   db-config:
   db-data:
 
 networks:
   db:
+    external: false
   proxiable:
+    name: proxiable
+    external: true

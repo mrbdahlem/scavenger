@@ -1,0 +1,27 @@
+services:
+  db:
+    image: "mariadb"
+    restart: "always"
+    env_file:
+      - ~/env_file
+    ports:
+      - 3306
+    volumes:
+      -db-config: /etc/mysql
+      -db-data: /var/lib/mysql
+    networks: 
+      - db-backend
+
+  backend:
+    build: .
+    ports:
+      - 8080
+    depends_on:
+      - db
+    networks:
+      - db-backend
+      - proxiable
+
+networks:
+  db-backend:
+  proxiable:

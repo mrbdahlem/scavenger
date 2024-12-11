@@ -11,57 +11,63 @@ export const playService = {
 
 export default playService;
 
-function startPlaying(game, name) {
+async function startPlaying(game, name) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: (name)
     };
 
-    return fetch(`${config.apiUrl}/play/start/${game}`, requestOptions).then(handleResponse);
+    const response = await fetch(`${config.apiUrl}/play/start/${game}`, requestOptions);
+    return handleResponse(response);
 }
 
-function endPlaying(playerId) {
+async function endPlaying(playerId) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'}
     };
 
-    return fetch(`${config.apiUrl}/play/end/${playerId}`, requestOptions).then(handleResponse);
+    const response = await fetch(`${config.apiUrl}/play/end/${playerId}`, requestOptions);
+    return handleResponse(response);
 }
 
-function tag(player, tag) {
+async function tag(player, tag) {
     const requestOptions = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json'},
     };
 
     // console.log(player, tag.hash);
-    return fetch(`${config.apiUrl}/play/${player}/tag/${tag.hash}`, requestOptions).then(handleResponse);
+    const response = await fetch(`${config.apiUrl}/play/${player}/tag/${tag.hash}`, requestOptions);
+    return handleResponse(response);
 }
 
-function getGameData(playerId) {
+async function getGameData(playerId) {
     const requestOptions = {
         method: 'GET',
     };
 
-    return fetch(`${config.apiUrl}/play/${playerId}`, requestOptions).then(handleResponse);
+    const response = await fetch(`${config.apiUrl}/play/${playerId}`, requestOptions);
+    return handleResponse(response);
 }
 
-function getPlayStats(playerId) {
+async function getPlayStats(playerId) {
     const requestOptions = {
         method: 'GET',
     };
 
-    return fetch(`${config.apiUrl}/play/player/${playerId}`, requestOptions).then(handleResponse);
+    const response = await fetch(`${config.apiUrl}/play/player/${playerId}`, requestOptions);
+    return handleResponse(response);
 }
 
-function getCurrentPlays(gameId) {
+async function getCurrentPlays(gameId) {
     const requestOptions = {
         method: 'GET',
     };
 
-    return fetch(`${config.apiUrl}/play/game/${gameId}`, requestOptions).then(handleResponse);
+    const response = await fetch(`${config.apiUrl}/play/game/${gameId}`, requestOptions);
+    return handleResponse(response);
 }
 
 function handleResponse(response) {

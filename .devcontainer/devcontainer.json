@@ -37,6 +37,7 @@
 	"remoteEnv": {
 		"MARIADB_DATABASE": "scavenger",
 		"MARIADB_USER": "scavenger",
-		"MARIADB_PASSWORD": "scavenger"
+		"MARIADB_PASSWORD": "scavenger",
+		"DATABASE_ENDPOINT": "localhost"
 	}
 }

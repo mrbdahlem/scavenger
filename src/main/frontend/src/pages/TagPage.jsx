@@ -3,7 +3,7 @@ import {useParams, Link} from "react-router-dom";
 import tagService from "@/lib/service/tag.service.js";
 import {useAuth} from "@/hooks/useAuth";
 import {usePlayer} from "@/hooks/usePlayer";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Card, CardContent} from "@/components/ui/card";
 import BigLogo from "@/components/BigLogo.jsx";
 import TagConfig from "@/components/tagConfig.jsx";
 import {PlayTag} from "@/components/playTag.jsx";

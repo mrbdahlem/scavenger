@@ -30,7 +30,7 @@ export const TagPage = () => {
     }
 
     return (
-        <Card className="shadow-xl max-w-fit p-6 m-auto mt-6 h-screen md:h-auto">
+        <Card className="shadow-xl max-w-fit p-6 m-auto mt-6 h-dvh md:h-auto">
             {/* <CardHeader> */}
                 {/* <CardTitle className="border-2 border-slate-800 p-3 text-center">#{hash}</CardTitle> */}
             {/* </CardHeader> */}

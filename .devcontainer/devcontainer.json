@@ -10,8 +10,9 @@
 			"version": "17",
 			"installMaven": "true"
 		},
-		"ghcr.io/devcontainers/features/node:1": {
-		},
+                "ghcr.io/devcontainers/features/node:1": {
+                        "version": "22.12.0"
+                },
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 
 	},
@@ -23,7 +24,7 @@
 	// "postCreateCommand": "java -version",
 	"postCreateCommand": { 
 		"db": "bash -i -c 'sudo apt update && sudo apt install -y mariadb-server && /workspaces/scavenger/builddb.sh'",
-		"node": "bash -i -c 'nvm install node'",
+                "node": "bash -i -c 'nvm install 22.12.0 && nvm use 22.12.0 && cd src/main/frontend && npm install'",
 		"mavendeps": "mvn dependency:resolve"
 	},
 	"postAttachCommand": "sudo /etc/init.d/mariadb start",

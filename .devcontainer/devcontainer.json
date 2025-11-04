@@ -3,17 +3,16 @@
 {
 	"name": "Java",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/java:17",
+	"image": "mcr.microsoft.com/devcontainers/java:21",
 
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {
-			"version": "17",
+			"version": "21",
 			"installMaven": "true"
 		},
-                "ghcr.io/devcontainers/features/node:1": {
-                        "version": "22.12.0"
-                },
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+				"ghcr.io/devcontainers/features/node:1": {
+						"version": "22.12.0"
+				}
 
 	},
 
@@ -22,10 +21,10 @@
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "java -version",
-	"postCreateCommand": { 
+	"postCreateCommand": {
 		"db": "bash -i -c 'sudo apt update && sudo apt install -y mariadb-server && /workspaces/scavenger/builddb.sh'",
-                "node": "bash -i -c 'nvm install 22.12.0 && nvm use 22.12.0 && cd src/main/frontend && npm install'",
-		"mavendeps": "mvn dependency:resolve"
+        "node" : "bash -i -c 'nvm install 22.12.0 && nvm use 22.12.0 && cd src/main/frontend && npm install'",
+		"mvn" : "bash -i -c 'mvn dependency:resolve'"
 	},
 	"postAttachCommand": "sudo /etc/init.d/mariadb start",
 
